@@ -1,3 +1,4 @@
 pandas
 nltk
 sentence-transformers
+plotly==5.18.0
