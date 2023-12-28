@@ -1,11 +1,42 @@
-import pandas as pd
+import nltk
 
 
-def database_preprocessing(df):
+def stopwords_removal(text):
+    """
+    Remove german and english stopwords from text.
+
+    :param text: A string from which stopwords should be removed.
+    :return: Text without stopwords.
+    """
+
+    nltk.download('stopwords', quiet=True)
+
+    german_stop_words = set(nltk.corpus.stopwords.words('german'))
+    english_stop_words = set(nltk.corpus.stopwords.words('english'))
+    stop_words = german_stop_words.union(english_stop_words)
+
+    filtered_words = []
+    for word in text.split():
+        test_word = word.lower()
+        test_word = test_word.replace(',', '')
+        test_word = test_word.replace('.', '')
+        test_word = test_word.replace(':', '')
+        if test_word in stop_words:
+            continue
+        else:
+            filtered_words.append(word)
+
+    filtered_text = ' '.join(filtered_words)
+
+    return filtered_text
+
+
+def database_preprocessing(df, remove_stopwords=True):
     """
     Database preprocessing function.
 
     :param df: A pandas dataframe (e.g., result of pandas.read_csv method).
+    :param remove_stopwords: if True, remove stopwords from 'Course Description' and 'Goals' columns.
     :return: A preprocessed pandas dataframe.
     """
     # Remove most special characters
@@ -24,4 +55,11 @@ def database_preprocessing(df):
     df['Mandatory?'] = df['Mandatory?'].replace('no', 'n')
     # todo: fix dataset TU Chemnitz entries
     df['Mandatory?'] = df['Mandatory?'].apply(lambda x: 'n' if x not in ['y', 'n'] else x)
+
+    df = df.dropna()  # Remove entries with N.A. values.
+
+    if remove_stopwords:
+        df['Course Description'] = df['Course Description'].apply(lambda x: stopwords_removal(x))
+        df['Goals'] = df['Goals'].apply(lambda x: stopwords_removal(x))
+
     return df
