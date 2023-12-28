@@ -56,13 +56,9 @@ def database_preprocessing(df, remove_stopwords=True):
     # todo: fix dataset TU Chemnitz entries
     df['Mandatory?'] = df['Mandatory?'].apply(lambda x: 'n' if x not in ['y', 'n'] else x)
 
-    # The conversion to string as well as the replacements are needed because otherwise df.dropna does not remove all
-    # nan rows in our dataset
-    df['Course Name'] = df['Course Name'].astype(str)
-    df = df.replace('nan', pd.NaT)
-    df = df.replace('NaN', pd.NaT)
-    df = df.replace('NAN', pd.NaT)
-    df = df.dropna()
+    # Remove entries with missing values. Important that this is done before stopword removal!
+    df.dropna(inplace=True)
+    df.reset_index(drop=True, inplace=True)
 
     if remove_stopwords:
         df['Course Description'] = df['Course Description'].apply(lambda x: stopwords_removal(x))
