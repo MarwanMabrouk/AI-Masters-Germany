@@ -1,5 +1,5 @@
 import nltk
-import pandas as pd
+
 
 def stopwords_removal(text):
     """
