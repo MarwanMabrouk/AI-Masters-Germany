@@ -12,7 +12,7 @@ def cluster_courses(df,
                     sentence_transformer_model='distiluse-base-multilingual-cased-v1',
                     reduction_method='tsne',
                     n_clusters='auto',
-                    k_ranges=np.linspace(2, 401, 400)):
+                    k_ranges=np.linspace(2, 201, 200)):
     """
     Cluster courses based on specified feature columns.
 
