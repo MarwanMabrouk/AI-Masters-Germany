@@ -6,6 +6,8 @@ from sklearn.manifold import TSNE
 import pandas as pd
 from sklearn.metrics import silhouette_score
 
+from AI_masters_germany.utils import stopwords_removal
+
 
 def cluster_courses(df,
                     feature_columns=('Course Name', 'Course Description', 'Goals'),
@@ -31,6 +33,10 @@ def cluster_courses(df,
 
     if reduction_method.lower() not in ['tsne', 'pca']:
         raise ValueError('The only valid dimensionality reduction methods are "pca" and "tsne"!')
+
+    # Remove stopwords
+    df['Course Description'] = df['Course Description'].apply(lambda x: stopwords_removal(x))
+    df['Goals'] = df['Goals'].apply(lambda x: stopwords_removal(x))
 
     model = SentenceTransformer(sentence_transformer_model)
     # Concat value of all the feature columns together
