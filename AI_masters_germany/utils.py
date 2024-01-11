@@ -31,7 +31,7 @@ def stopwords_removal(text):
     return filtered_text
 
 
-def database_preprocessing(df, remove_stopwords=True):
+def database_preprocessing(df, remove_stopwords=False):
     """
     Database preprocessing function.
 
