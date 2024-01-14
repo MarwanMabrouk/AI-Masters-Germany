@@ -16,6 +16,16 @@ def firstPage():
     return render_template("firstPage.html")
 
 
+@app.route("/institute_types")
+def institute_types():
+
+    database = aim.get_database()
+    fig = plotting.plot_institute_types(database, show_plot=False)
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template("institute_types.html", fig_json=fig_json)
+
+
 @app.route("/course_clustering", methods=['GET', 'POST'])
 def course_clustering():
 
@@ -59,7 +69,7 @@ def course_clustering():
 
 
 @app.route("/popular_courses", methods=['GET', 'POST'])
-def course_clustering():
+def popular_courses():
 
     database = aim.get_database()
     clusters = aim.get_clustered_courses()
