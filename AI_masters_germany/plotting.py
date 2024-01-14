@@ -22,3 +22,8 @@ def plot_clusters(clustering_result, show_plot=True):
         fig.show()
 
     return fig
+
+
+def plot_popular_courses(data, show_plot):
+    # todo: Fill with code
+    return None
