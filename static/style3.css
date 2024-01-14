@@ -8,3 +8,14 @@ h1{
 p{
     color: black;
 }
+
+
+
+.select-container{
+    display: flex;
+    gap: 10px;
+}
+
+.custom-select{
+    width: 400px;
+}
