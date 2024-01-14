@@ -25,8 +25,17 @@ def institute_types():
 
     return render_template("institute_types.html", fig_json=fig_json)
 
+@app.route("/lecture_types")
+def lecture_types():
 
-@app.route("/course_clustering", methods=['GET', 'POST'])
+    database = aim.get_database()
+    fig = plotting.plot_lecture_types(database, show_plot=False)
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template("lecture_types.html", fig_json=fig_json)
+
+
+@app.route("/course_clustering", methods=["GET", "POST"])
 def course_clustering():
 
     database = aim.get_database()
@@ -42,9 +51,9 @@ def course_clustering():
         )
 
         lecture_type = request.form["lecture_type"]
-        if lecture_type == 'all':
+        if lecture_type == "all":
             lecture_type_condition = pd.Series([True] * len(database["Type"]))
-        elif lecture_type == 'Obligatory':
+        elif lecture_type == "Obligatory":
             lecture_type_condition = database["Type"] == "Obligatory"
         else:
             lecture_type_condition = database["Type"] == "Elective"
@@ -55,7 +64,7 @@ def course_clustering():
         min_credits = 1
         max_credits = int(database["ECTS"].max())
 
-        lecture_type = 'all'
+        lecture_type = "all"
 
         data = clusters
 
@@ -68,7 +77,7 @@ def course_clustering():
                            lecture_type=lecture_type)
 
 
-@app.route("/popular_courses", methods=['GET', 'POST'])
+@app.route("/popular_courses", methods=["GET", "POST"])
 def popular_courses():
 
     database = aim.get_database()
@@ -84,9 +93,9 @@ def popular_courses():
         )
 
         lecture_type = request.form["lecture_type"]
-        if lecture_type == 'all':
+        if lecture_type == "all":
             lecture_type_condition = pd.Series([True] * len(database["Type"]))
-        elif lecture_type == 'Obligatory':
+        elif lecture_type == "Obligatory":
             lecture_type_condition = database["Type"] == "Obligatory"
         else:
             lecture_type_condition = database["Type"] == "Elective"
@@ -97,7 +106,7 @@ def popular_courses():
         min_credits = 1
         max_credits = int(database["ECTS"].max())
 
-        lecture_type = 'all'
+        lecture_type = "all"
 
         data = clusters
 
@@ -110,8 +119,8 @@ def popular_courses():
                            lecture_type=lecture_type)
 
 
-if __name__ == '__main__':
-    load_database_thread = threading.Thread(target=aim.load_database, args=('./dataset.csv',))
+if __name__ == "__main__":
+    load_database_thread = threading.Thread(target=aim.load_database, args=("./dataset.csv",))
     course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
 
     load_database_thread.start()

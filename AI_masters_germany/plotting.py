@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 
 def plot_institute_types(database, show_plot=True):
@@ -18,7 +19,7 @@ def plot_institute_types(database, show_plot=True):
 
 
     institutes["Names"] = institutes["Uni/Fachhochschule/TU"].apply(
-        lambda x: ', <br>'.join(database[database["Uni/Fachhochschule/TU"] == x]["Uni Name"].unique())
+        lambda x: ", <br>".join(database[database["Uni/Fachhochschule/TU"] == x]["Uni Name"].unique())
     )
 
     fig = px.bar(
@@ -27,11 +28,41 @@ def plot_institute_types(database, show_plot=True):
         y="Amount_Institute_Type",
         hover_data=["Names"],
         color="Uni/Fachhochschule/TU",
-        color_discrete_sequence=['black', 'red', 'yellow']
+        color_discrete_sequence=["black", "red", "yellow"]
     )
 
     fig.update_layout(
         xaxis_title="Institute type",
+        yaxis_title="Entries in the database"
+    )
+
+    if show_plot:
+        fig.show()
+
+    return fig
+
+
+def plot_lecture_types(database, show_plot):
+    database = database.copy()
+    database["Name"] = database["Uni Name"] + " - " + database["Degree Name"]
+
+    lectures = database[["Name", "Type"]]
+    lectures = lectures.drop_duplicates()
+
+    lectures["Amount"] = lectures.apply(
+        lambda row: database[(database["Name"] == row["Name"]) & (database["Type"] == row["Type"])].shape[0], axis=1
+    )
+
+    fig = px.bar(
+        lectures,
+        x="Name",
+        y="Amount",
+        color="Type",
+        barmode="group"
+    )
+
+    fig.update_layout(
+        xaxis_title="Study degree",
         yaxis_title="Entries in the database"
     )
 
