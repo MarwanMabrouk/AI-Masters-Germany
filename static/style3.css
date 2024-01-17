@@ -3,9 +3,11 @@
     background-color: blue;
 }
 h1{
+    text-align: center;
     color: black;
 }
 p{
+    text-align: center;
     color: black;
 }
 
@@ -18,4 +20,12 @@ p{
 
 .custom-select{
     width: 400px;
+}
+
+.card {
+    border: 3px solid blue;
+}
+
+hr{
+    color: blue;
 }

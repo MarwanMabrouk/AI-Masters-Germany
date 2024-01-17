@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import pandas as pd
+import openpyxl
 
 app = Flask(__name__)
 
@@ -9,6 +10,7 @@ def get_data():
     course_name = data['Course Name'].tolist()
     degree_Name = data['Degree Name'].unique().tolist()
     uni_fachhochschule_tu = data['Uni/Fachhochschule/TU'].unique().tolist()
+    # uni_name=data['Uni Name'].unique().tolist()
     ccn = len(course_name)
     cdn = len(degree_Name)
     cuft = len(uni_fachhochschule_tu)
