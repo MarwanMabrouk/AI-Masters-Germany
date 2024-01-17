@@ -76,7 +76,7 @@ def course_clustering():
                            min_credits=min_credits, max_credits=max_credits,
                            lecture_type=lecture_type)
 
-
+  
 @app.route("/popular_courses", methods=["GET", "POST"])
 def popular_courses():
 
@@ -119,8 +119,9 @@ def popular_courses():
                            lecture_type=lecture_type)
 
 
-if __name__ == "__main__":
-    load_database_thread = threading.Thread(target=aim.load_database, args=("./dataset.csv",))
+if __name__ == '__main__':
+    DATASET_PATH = './dataset.csv'
+    load_database_thread = threading.Thread(target=aim.load_database, args=(DATASET_PATH,))
     course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
 
     load_database_thread.start()
