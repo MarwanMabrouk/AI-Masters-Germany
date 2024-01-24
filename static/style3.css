@@ -1,4 +1,5 @@
 
+
 .nav-pills li a:hover{
     background-color: blue;
 }
@@ -19,7 +20,7 @@ p{
 }
 
 .custom-select{
-    width: 400px;
+    width: 300px;
 }
 
 .card {
