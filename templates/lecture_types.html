@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture types</title>
+</head>
+<body>
+
+    <div id="chart" class="chart"></div>
+
+</body>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    var graph = {{ fig_json | safe}};
+    Plotly.plot("chart", graph, {});
+</script>
+
+</html>
