@@ -21,33 +21,88 @@
                         </a>
                         <ul class="nav nav-pills flex-column mt-4 ">
                             <li class="nav-item py-2 py-sm-0">
-                                <a href="#" class="nav-link text-white"><i class="fs-5 fa fa-house"></i><span
+                                <a href="{{url_for('firstPage')}}" class="nav-link text-white"><i class="fs-5 fa fa-house"></i><span
                                         class="fs-4 d-none ms-3 d-sm-inline"> Home</span></a>
                             </li>
                             <li class="nav-item py-2 py-sm-0">
-                                <a href="#" class="nav-link text-white"><i class="fa-solid fa-chart-simple"></i><span
-                                        class="fs-4 d-none ms-3 d-sm-inline"> Statistics</span></a>
+                                <a href="{{url_for('second_page')}}" class="nav-link text-white"><i class="fa-solid fa-magnifying-glass"></i><span
+                                        class="fs-4 d-none ms-3 d-sm-inline"> Search </span></a>
                             </li>
                             <li class="nav-item py-2 py-sm-0">
-                                <a href="#" class="nav-link text-white"><i class="fa-solid fa-chart-line"></i><span
+                                <a href="{{url_for('third_page')}}" class="nav-link text-white"><i class="fa-solid fa-chart-line"></i><span
                                         class="fs-4 d-none ms-3 d-sm-inline"> Visualization</span></a>
                             </li>
                         </ul>
 
                     </div>
                 </div>
-                <div class="col-12 col-sm-8 col-md-8 col-lg-9">
-                    <h1>LA project</h1>
-                    <hr />
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat, quisquam temporibus eaque
-                        vero provident? Quos inventore, minus autem sunt porro laborum? Ducimus similique eveniet nesciunt
-                        numquam eligendi autem architecto!</p>
+                <div class="container-fluid">
+                    <div class="col-12 col-sm-8 col-md-8 col-lg-9">
+                        <div class="container">
+                            <h1 class="fw-bold">project Description</h1>
+                            <hr />
+                            <p class="lh-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat, quisquam temporibus eaque
+                            vero provident? Quos inventore, minus autem sunt porro laborum? Ducimus similique eveniet nesciunt
+                            numquam eligendi autem architecto! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat, quisquam temporibus eaque
+                            vero provident? Quos inventore, minus autem sunt porro laborum? Ducimus similique eveniet nesciunt
+                            numquam eligendi autem architecto!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat, quisquam temporibus eaque
+                            vero provident? Quos inventore, minus autem sunt porro laborum? Ducimus similique eveniet nesciunt
+                            numquam eligendi autem architecto!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat, quisquam temporibus eaque
+                            vero provident? Quos inventore, minus autem sunt porro laborum? Ducimus similique eveniet nesciunt
+                            numquam eligendi autem architecto!</p>
+                        </div>
+                        <hr/>
+                        <div class="container m-5">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <!-- Card 1 -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- Card content goes here -->
+                                            <h5 class="card-title">Total number of Institutes</h5>
+                                            <p class="card-text">{{cuft}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <!-- Card 2 -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- Card content goes here -->
+                                            <h5 class="card-title">Total number of Master degree</h5>
+                                            <p class="card-text">{{cdn}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <!-- Card 3 -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- Card content goes here -->
+                                            <h5 class="card-title">Total number of Courses</h5>
+                                            <p class="card-text">{{ccn}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+    <!--script>
+        $(".sidebar ul li").on('click', function () {
+            $(".sidebar ul li.active").removeClass('active');
+            $(this).addClass("active");
+        });
+    </script-->
 
 </body>
 

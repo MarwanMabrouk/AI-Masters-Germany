@@ -4,3 +4,4 @@ sentence-transformers
 plotly==5.18.0
 scikit-learn
 flask
+openpyxl
