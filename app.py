@@ -31,8 +31,8 @@ collection = db['data']
 
 app = Flask(__name__)
 aim = AIM(database_as_df= pd.DataFrame(list(collection.find())))  # Object that allows clustering etc.
+print('Done connecting to database!')
 
-pritn('Done connecting to database!')
 def get_data():
     course_name=collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
