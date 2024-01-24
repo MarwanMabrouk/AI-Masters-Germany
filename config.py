@@ -1,0 +1,2 @@
+DATABASE_NAME = "test"
+COLLECTION_NAME = "test"
