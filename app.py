@@ -92,6 +92,26 @@ def course_clustering():
     clusters = aim.get_clustered_courses()
 
     if request.method == "POST":
+
+        specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
+        checked_specialisations = request.form.getlist("specialisation")
+        ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
+        ds_rows = database["Degree Name Tokens"].str.contains("Data Science", na=False)
+        da_rows = database["Degree Name Tokens"].str.contains("Data Analytics", na=False)
+        ml_rows = database["Degree Name Tokens"].str.contains("Machine Learning", na=False)
+        other_rows = ~ai_rows & ~ds_rows & ~da_rows & ~ml_rows
+
+        if "AI" in checked_specialisations:
+            specialisation_conditions |= ai_rows
+        if "DS" in checked_specialisations:
+            specialisation_conditions |= ds_rows
+        if "DA" in checked_specialisations:
+            specialisation_conditions |= da_rows
+        if "ML" in checked_specialisations:
+            specialisation_conditions |= ml_rows
+        if "other" in checked_specialisations:
+            specialisation_conditions |= other_rows
+
         min_credits = int(request.form["min_credits"])
         max_credits = int(request.form["max_credits"])
 
@@ -108,7 +128,7 @@ def course_clustering():
         else:
             lecture_type_condition = database["Type"] == "Elective"
 
-        data = clusters[credits_condition & lecture_type_condition]
+        data = clusters[credits_condition & lecture_type_condition & specialisation_conditions]
 
     else:
         min_credits = 1
@@ -118,13 +138,16 @@ def course_clustering():
 
         data = clusters
 
+        checked_specialisations = ["AI", "DS", "DA", "ML", "other"]
+
     fig = plotting.plot_clusters(data, show_plot=False)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template("course_clustering.html",
                            fig_json=fig_json,
                            min_credits=min_credits, max_credits=max_credits,
-                           lecture_type=lecture_type)
+                           lecture_type=lecture_type,
+                           checked_specialisations=checked_specialisations)
 
   
 @app.route("/popular_courses", methods=["GET", "POST"])
