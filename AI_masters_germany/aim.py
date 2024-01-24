@@ -5,8 +5,11 @@ import time
 
 
 class AIM:
-    def __init__(self):
-        self.__database = None
+    def __init__(self,database_as_df=None):
+        if database_as_df is not None:
+            self.__database = database_as_df
+        else:
+            self.__database = None
         self.__activated_database_loading = False
 
         self.__course_clusters = None

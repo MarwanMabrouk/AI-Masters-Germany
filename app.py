@@ -9,20 +9,47 @@ import numpy as np
 import json
 import plotly
 import threading
+from pymongo import MongoClient
+
+#TODO: convert credentials to environment variables
+print('Connecting to database...')
+USERNAME = "doadmin"
+PASSWORD = "Rj5M6X7e219DvQ43"
+DB_NAME = "data"
+CONNECTION_STRING = 'mongodb+srv://{username}:{password}@{host}/{dbname}?{options}'.\
+    format(username=USERNAME,
+           password=PASSWORD,
+           host='ai-masters-8e63c445.mongo.ondigitalocean.com',
+           dbname=DB_NAME,
+           options='tls=true&authSource=admin&replicaSet=ai-masters')
+client = MongoClient(CONNECTION_STRING)
+
+db = client['data']
+collection = db['data']
+
+
 
 app = Flask(__name__)
-aim = AIM()  # Object that allows clustering etc.
+aim = AIM(database_as_df= pd.DataFrame(list(collection.find())))  # Object that allows clustering etc.
 
+pritn('Done connecting to database!')
 def get_data():
-    data=pd.read_excel("University Data LA Project(4).xlsx")
-    course_name=data['Course Name'].tolist()
-    degree_Name=data['Degree Name'].unique().tolist()
-    uni_fachhochschule_tu=data['Uni/Fachhochschule/TU'].unique().tolist()
-    #uni_name=data['Uni Name'].unique().tolist()
-    ccn=len(course_name)
-    cdn=len(degree_Name)
-    cuft=len(uni_fachhochschule_tu)
-    return course_name, degree_Name,uni_fachhochschule_tu,ccn,cdn,cuft
+    course_name=collection.distinct("Course Name")
+    degree_Name = collection.distinct("Degree Name")
+    uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
+
+    #get no of unique Uni
+    cuft = len(collection.distinct("Uni Name"))
+
+    #get no of unique Degree 
+    cdn = len(collection.distinct("Degree Name"))
+    
+    #get no of unique Course Name
+    ccn = collection.count_documents({})
+
+
+
+    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
 
 
 def get_data():
