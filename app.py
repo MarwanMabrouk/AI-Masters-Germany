@@ -93,12 +93,8 @@ def course_clustering():
 
     if request.method == "POST":
 
-        print(set(list(database['Degree Name Tokens'])))
-
         specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
         checked_specialisations = request.form.getlist("specialisation")
-        print(checked_specialisations)
-
         ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
         ds_rows = database["Degree Name Tokens"].str.contains("Data Science", na=False)
         da_rows = database["Degree Name Tokens"].str.contains("Data Analytics", na=False)
