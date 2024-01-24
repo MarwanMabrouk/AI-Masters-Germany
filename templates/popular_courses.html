@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Popular courses</title>
+</head>
+<body>
+
+    <div id='chart' class='chart'></div>
+
+    <form method="POST">
+
+        <label for="min_credits">Min. ECTS:</label>
+        <input type="number" id="min_credits" name="min_credits" value="{{ min_credits }}">
+        <br>
+
+        <label for="max_credits">Max. ECTS:</label>
+        <input type="number" id="max_credits" name="max_credits" value="{{ max_credits }}">
+        <br>
+
+        <fieldset>
+
+            <div>
+            <input type="radio" id="show_all" name="lecture_type" value="all" {% if lecture_type == 'all' %}checked{% endif %} />
+            <label for="show_all">Obligatory & Elective</label>
+            </div>
+
+            <div>
+            <input type="radio" id="show_obligatory" name="lecture_type" value="Obligatory" {% if lecture_type == 'Obligatory' %}checked{% endif %} />
+            <label for="show_obligatory">Obligatory</label>
+            </div>
+
+            <div>
+            <input type="radio" id="show_elective" name="lecture_type" value="Elective" {% if lecture_type == 'Elective' %}checked{% endif %} />
+            <label for="show_elective">Elective</label>
+            </div>
+        </fieldset>
+        <br>
+
+        <input type="submit" value="Update plot">
+
+    </form>
+</body>
+
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    var graph = {{ fig_json | safe}};
+    Plotly.plot("chart", graph, {});
+</script>
+
+</html>
