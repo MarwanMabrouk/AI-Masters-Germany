@@ -1,38 +1,19 @@
 from flask import Flask, render_template, request
 import pandas as pd
 import openpyxl
-import pymongo
-from config import *
+
 app = Flask(__name__)
-db = pymongo.MongoClient()
-DATABASE = db[DATABASE_NAME]
-COLLECTION = DATABASE[COLLECTION_NAME]
 
-#Calculate Unique Degrees
-unique_degrees = 0
-unique_set = set()
-for i in COLLECTION.find({}, {"Uni Name": 1, "Degree Name": 1}):
-    unique_set.add((i["Uni Name"], i["Degree Name"]))
-
-unique_degrees = len(unique_set)
 
 def get_data():
-    
-    course_name=COLLECTION.distinct("Course Name")
-    degree_Name = COLLECTION.distinct("Degree Name")
-    uni_fachhochschule_tu = COLLECTION.distinct("Uni/Fachhochschule/TU")
-
-    #get no of unique Uni
-    cuft = len(COLLECTION.distinct("Uni Name"))
-
-    #get no of unique Degree 
-    cdn = unique_degrees
-    
-    #get no of unique Course Name
-    ccn = COLLECTION.count_documents({})
-
-
-
+    data = pd.read_excel("University Data LA Project(4).xlsx")
+    course_name = data['Course Name'].tolist()
+    degree_Name = data['Degree Name'].unique().tolist()
+    uni_fachhochschule_tu = data['Uni/Fachhochschule/TU'].unique().tolist()
+    # uni_name=data['Uni Name'].unique().tolist()
+    ccn = len(course_name)
+    cdn = len(degree_Name)
+    cuft = len(uni_fachhochschule_tu)
     return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
 
 
@@ -49,6 +30,12 @@ def second_page():
     return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
                            uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
 
+
+@app.route("/visualization")
+def second_page():
+    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
+    return render_template("third_page.html", course_name=course_name, degree_Name=degree_Name,
+                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
 
 if __name__ == '__main__':
     app.debug = True
