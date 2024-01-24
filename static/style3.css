@@ -1,0 +1,32 @@
+
+
+.nav-pills li a:hover{
+    background-color: blue;
+}
+h1{
+    text-align: center;
+    color: black;
+}
+p{
+    text-align: center;
+    color: black;
+}
+
+
+
+.select-container{
+    display: flex;
+    gap: 10px;
+}
+
+.custom-select{
+    width: 300px;
+}
+
+.card {
+    border: 3px solid blue;
+}
+
+hr{
+    color: blue;
+}
