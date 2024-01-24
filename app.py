@@ -26,12 +26,11 @@ client = MongoClient(CONNECTION_STRING)
 
 db = client['data']
 collection = db['data']
-
-
+print('Done connecting to database!')
 
 app = Flask(__name__)
-aim = AIM(database_as_df= pd.DataFrame(list(collection.find())))  # Object that allows clustering etc.
-print('Done connecting to database!')
+aim = AIM(collection_object=collection)
+
 
 def get_data():
     course_name=collection.distinct("Course Name")
@@ -47,20 +46,6 @@ def get_data():
     #get no of unique Course Name
     ccn = collection.count_documents({})
 
-
-
-    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
-
-
-def get_data():
-    data = pd.read_excel("University Data LA Project(4).xlsx")
-    course_name = data['Course Name'].tolist()
-    degree_Name = data['Degree Name'].unique().tolist()
-    uni_fachhochschule_tu = data['Uni/Fachhochschule/TU'].unique().tolist()
-    # uni_name=data['Uni Name'].unique().tolist()
-    ccn = len(course_name)
-    cdn = len(degree_Name)
-    cuft = len(uni_fachhochschule_tu)
     return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
 
 
@@ -186,11 +171,7 @@ def popular_courses():
 
 if __name__ == '__main__':
     DATASET_PATH = './dataset.csv'
-    load_database_thread = threading.Thread(target=aim.load_database, args=(DATASET_PATH,))
     course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
-
-    load_database_thread.start()
-    load_database_thread.join()
     course_clustering_thread.start()
 
     app.debug = True
