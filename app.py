@@ -32,7 +32,7 @@ def second_page():
 
 
 @app.route("/visualization")
-def second_page():
+def third_page():
     course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
     return render_template("third_page.html", course_name=course_name, degree_Name=degree_Name,
                            uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
