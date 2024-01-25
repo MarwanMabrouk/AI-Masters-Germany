@@ -57,9 +57,7 @@ def firstPage():
 
 @app.route("/visualization")
 def third_page():
-    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
-    return render_template("third_page.html", course_name=course_name, degree_Name=degree_Name,
-                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
+    return render_template("third_page.html")
 
 @app.route("/search")
 def second_page():
