@@ -51,6 +51,16 @@ body {
     min-width: 260px;
 }
 
+#box_1 {
+    background-color: #0e2238;
+
+}
+
+#box_2 {
+    background-color: #a4acb4;
+
+}
+
 .toggle-btn {
     background-color: transparent;
     cursor: pointer;
