@@ -80,13 +80,14 @@ def plot_clusters(clustering_result, show_plot=True):
     :param show_plot: Set to True to show the plot.
     :return: Plotly figure object.
     """
+
     fig = px.scatter(
         clustering_result,
         x="Component_1",
         y="Component_2",
         color="Cluster",
         title="Course clustering result",
-        hover_data=["Course Name"]
+        hover_data=["Course Name", "Degree Name", "Uni Name"]
     )
 
     if show_plot:

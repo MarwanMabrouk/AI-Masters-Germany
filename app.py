@@ -9,31 +9,43 @@ import numpy as np
 import json
 import plotly
 import threading
+from pymongo import MongoClient
+
+#TODO: convert credentials to environment variables
+print('Connecting to database...')
+USERNAME = "doadmin"
+PASSWORD = "Rj5M6X7e219DvQ43"
+DB_NAME = "data"
+CONNECTION_STRING = 'mongodb+srv://{username}:{password}@{host}/{dbname}?{options}'.\
+    format(username=USERNAME,
+           password=PASSWORD,
+           host='ai-masters-8e63c445.mongo.ondigitalocean.com',
+           dbname=DB_NAME,
+           options='tls=true&authSource=admin&replicaSet=ai-masters')
+client = MongoClient(CONNECTION_STRING)
+
+db = client['data']
+collection = db['data']
+print('Done connecting to database!')
 
 app = Flask(__name__)
-aim = AIM()  # Object that allows clustering etc.
-
-def get_data():
-    data=pd.read_excel("University Data LA Project(4).xlsx")
-    course_name=data['Course Name'].tolist()
-    degree_Name=data['Degree Name'].unique().tolist()
-    uni_fachhochschule_tu=data['Uni/Fachhochschule/TU'].unique().tolist()
-    #uni_name=data['Uni Name'].unique().tolist()
-    ccn=len(course_name)
-    cdn=len(degree_Name)
-    cuft=len(uni_fachhochschule_tu)
-    return course_name, degree_Name,uni_fachhochschule_tu,ccn,cdn,cuft
+aim = AIM(collection_object=collection)
 
 
 def get_data():
-    data = pd.read_excel("University Data LA Project(4).xlsx")
-    course_name = data['Course Name'].tolist()
-    degree_Name = data['Degree Name'].unique().tolist()
-    uni_fachhochschule_tu = data['Uni/Fachhochschule/TU'].unique().tolist()
-    # uni_name=data['Uni Name'].unique().tolist()
-    ccn = len(course_name)
-    cdn = len(degree_Name)
-    cuft = len(uni_fachhochschule_tu)
+    course_name=collection.distinct("Course Name")
+    degree_Name = collection.distinct("Degree Name")
+    uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
+
+    #get no of unique Uni
+    cuft = len(collection.distinct("Uni Name"))
+
+    #get no of unique Degree 
+    cdn = len(collection.distinct("Degree Name"))
+    
+    #get no of unique Course Name
+    ccn = collection.count_documents({})
+
     return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
 
 
@@ -80,6 +92,26 @@ def course_clustering():
     clusters = aim.get_clustered_courses()
 
     if request.method == "POST":
+
+        specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
+        checked_specialisations = request.form.getlist("specialisation")
+        ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
+        ds_rows = database["Degree Name Tokens"].str.contains("Data Science", na=False)
+        da_rows = database["Degree Name Tokens"].str.contains("Data Analytics", na=False)
+        ml_rows = database["Degree Name Tokens"].str.contains("Machine Learning", na=False)
+        other_rows = ~ai_rows & ~ds_rows & ~da_rows & ~ml_rows
+
+        if "AI" in checked_specialisations:
+            specialisation_conditions |= ai_rows
+        if "DS" in checked_specialisations:
+            specialisation_conditions |= ds_rows
+        if "DA" in checked_specialisations:
+            specialisation_conditions |= da_rows
+        if "ML" in checked_specialisations:
+            specialisation_conditions |= ml_rows
+        if "other" in checked_specialisations:
+            specialisation_conditions |= other_rows
+
         min_credits = int(request.form["min_credits"])
         max_credits = int(request.form["max_credits"])
 
@@ -96,7 +128,7 @@ def course_clustering():
         else:
             lecture_type_condition = database["Type"] == "Elective"
 
-        data = clusters[credits_condition & lecture_type_condition]
+        data = clusters[credits_condition & lecture_type_condition & specialisation_conditions]
 
     else:
         min_credits = 1
@@ -106,13 +138,16 @@ def course_clustering():
 
         data = clusters
 
+        checked_specialisations = ["AI", "DS", "DA", "ML", "other"]
+
     fig = plotting.plot_clusters(data, show_plot=False)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template("course_clustering.html",
                            fig_json=fig_json,
                            min_credits=min_credits, max_credits=max_credits,
-                           lecture_type=lecture_type)
+                           lecture_type=lecture_type,
+                           checked_specialisations=checked_specialisations)
 
   
 @app.route("/popular_courses", methods=["GET", "POST"])
@@ -159,11 +194,7 @@ def popular_courses():
 
 if __name__ == '__main__':
     DATASET_PATH = './dataset.csv'
-    load_database_thread = threading.Thread(target=aim.load_database, args=(DATASET_PATH,))
     course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
-
-    load_database_thread.start()
-    load_database_thread.join()
     course_clustering_thread.start()
 
     app.debug = True
