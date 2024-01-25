@@ -36,6 +36,13 @@ body {
     background-color: #fafbfe;
 }
 
+.chart {
+    width: auto;
+    min-height: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+}
+
 #sidebar {
     width: 70px;
     min-width: 70px;
