@@ -5,26 +5,16 @@ import time
 
 
 class AIM:
-    def __init__(self):
-        self.__database = None
-        self.__activated_database_loading = False
-
-        self.__course_clusters = None
-        self.__activated_clustering = False
-
-    def load_database(self, dataset_path):
-        self.__activated_database_loading = True
-        self.__database = pd.read_csv(dataset_path)
+    def __init__(self, collection_object):
+        self.__collection_object = collection_object
+        self.__database = pd.DataFrame(list(collection_object.find()))
         self.__database = utils.database_preprocessing(self.__database)
+        self.__activated_clustering = False
+        self.__course_clusters = None
 
     def get_database(self):
-        if not self.__activated_database_loading:
-            raise ValueError('You need to start loading the database before trying to get the database!')
-        else:
-            while self.__database is None:
-                print('Waiting for the database to finish loading...')
-                time.sleep(2)
-            return self.__database
+        return self.__database
+
 
     def cluster_courses(self, n_clusters='auto', k_ranges=np.linspace(80, 121, 40)):
         self.__activated_clustering = True

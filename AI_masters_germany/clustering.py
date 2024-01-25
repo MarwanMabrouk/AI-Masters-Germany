@@ -78,5 +78,7 @@ def cluster_courses(df,
     result = pd.DataFrame(X, columns=['Component_1', 'Component_2'])
     result['Cluster'] = clusters
     result['Course Name'] = df['Course Name']
+    result['Degree Name'] = df['Degree Name']
+    result['Uni Name'] = df['Uni Name']
 
     return result
