@@ -13,15 +13,13 @@
         </div>
     </div>
 </section>
-
+<section>
     <div class="container-fluid">
         <div class="col-12 col-sm-8 col-md-8 col-lg-9">
             <div class="row" >
                 <div class="col-12">
-                    <!--div class="container m-5 mx-auto" style="max-width: 100%;"-->
-                        <div id='chart' class='chart m-5 mx-auto' style='max-height: 500px; max-width: 100%;' >
+                        <div id='chart' class='chart m-5 mx-auto' >
                         </div>
-                    <!--/div-->
                 </div>
                 <div class="col-12 col-lg-6">
                     <form method="POST">
@@ -63,13 +61,14 @@
                                 <input type="checkbox" name="specialisation" value="ML" {% if 'ML' in checked_specialisations %}checked{% endif %} >Machine Learning<br>
                                 <input type="checkbox" name="specialisation" value="other" {% if 'other' in checked_specialisations %}checked{% endif %} >Other<br>
                         </fieldset>
-                        <!--input class="btn btn-primary m-3" value="Update plot"-->
                         <button class="btn btn-primary m-3" type="submit">Update plot</button>
 
                     </form>
                 </div>
+            </div>
         </div>
     </div>
+</section>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
         var graph = {{ fig_json | safe}};

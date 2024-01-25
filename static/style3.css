@@ -37,9 +37,8 @@ body {
 }
 
 .chart {
-    width: auto;
-    min-height: 100%;
-    overflow: hidden;
+    min-width: 100vh;
+    min-height: auto;
     transition: all 0.35s ease-in-out;
 }
 
