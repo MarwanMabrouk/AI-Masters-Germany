@@ -40,6 +40,15 @@
                                     </label>
                                 </div>
                         </fieldset>
+
+                        <fieldset>
+                                <legend>Specialisation</legend>
+                                <input type="checkbox" name="specialisation" value="AI" {% if 'AI' in checked_specialisations %}checked{% endif %} >Artificial Intelligence<br>
+                                <input type="checkbox" name="specialisation" value="DS" {% if 'DS' in checked_specialisations %}checked{% endif %} >Data Science<br>
+                                <input type="checkbox" name="specialisation" value="DA" {% if 'DA' in checked_specialisations %}checked{% endif %} >Data Analytics<br>
+                                <input type="checkbox" name="specialisation" value="ML" {% if 'ML' in checked_specialisations %}checked{% endif %} >Machine Learning<br>
+                                <input type="checkbox" name="specialisation" value="other" {% if 'other' in checked_specialisations %}checked{% endif %} >Other<br>
+                        </fieldset>
                         <!--input class="btn btn-primary m-3" value="Update plot"-->
                         <button class="btn btn-primary m-3" type="submit">Update plot</button>
 
