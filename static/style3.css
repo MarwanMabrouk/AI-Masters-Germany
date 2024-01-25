@@ -167,3 +167,7 @@ p{
 hr{
     color: blue;
 }
+
+.custom-select{
+    width: 300px;
+}
