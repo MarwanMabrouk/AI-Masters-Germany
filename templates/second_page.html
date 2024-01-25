@@ -1,66 +1,65 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="col-12 col-sm-8 col-md-8 col-lg-9">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-lg-6">
-                    <!--div class="container m-5 border p-3"-->
-                    <div class="container m-5">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                AI programms
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault2" checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                DS programms
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault3" checked>
-                            <label class="form-check-label" for="flexRadioDefault3">
-                                ML programms
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault4" checked>
-
-                            <label class="form-check-label" for="flexRadioDefault4">
-                                AI and DS programms
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault5" checked>
-                            <label class="form-check-label" for="flexRadioDefault5">
-
-                                ML and DS programms
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault6" checked>
-                            <label class="form-check-label" for="flexRadioDefault6">
-                                AI and ML programms
-                            </label>
-                        </div>
-                    </div>
-                </div>
+<section class="bg-white text-dark pt-5 p-lg-0 pt-lg-5 text-center text-sm-start">
+    <div class="container">
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <div>
+                <h1>Explore the <span  class="text-warning">DataBase</span></h1>
+                <p class="lead my-3">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero, molestias voluptate? Aperiam non alias quod suscipit, pariatur earum itaque architecto.
+                </p>
             </div>
-            <div class="col-12 col-lg-6">
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container-fluid">
+        <div class="row" >
+            <div class="col-12">
+                <form method="POST">
+                    <fieldset class="m-3">
+                        <legend>Choose the Specialisation:</legend>
+                        <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckDefault" value="AI" {% if 'AI' in checked_specialisations %}checked{% endif %} >
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Artificial Intelligence
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked1" value="DS" {% if 'DS' in checked_specialisations %}checked{% endif %} >
+                            <label class="form-check-label" for="flexCheckChecked1">
+                                Data Science
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked2" value="AD" {% if 'DA' in checked_specialisations %}checked{% endif %} >
+                            <label class="form-check-label" for="flexCheckChecked2">
+                                Data Analytics
+                            </label>
+                        </div>
+                         <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked3" value="ML" {% if 'ML' in checked_specialisations %}checked{% endif %} >
+                            <label class="form-check-label" for="flexCheckChecked3">
+                                Machine Learning
+                            </label>
+                        </div>
+                         <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked4" value="other" {% if 'other' in checked_specialisations %}checked{% endif %} >
+                            <label class="form-check-label" for="flexCheckChecked4">
+                                Other
+                            </label>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-12">
                 <form id="searchForm" name="search">
                     <div class="select-container m-3">
                         <div class="form-floating">
                             <select class="form-select custom-select" id="floatingSelect"
                                 aria-label="Floating label select example">
                                 {%for degree in degree_Name%}
-                                <option>{{degree}}</option>
+                                    <option>{{degree}}</option>
                                 {% endfor %}
                             </select>
                             <label for="floatingSelect">Select one of the Master Programs</label>
@@ -69,25 +68,27 @@
                             <select class="form-select custom-select" id="floatingSelect2"
                                 aria-label="Floating label select example">
                                 {%for uin in uft%}
-                                <option>{{uin}}</option>
+                                    <option>{{uin}}</option>
                                 {% endfor %}
                             </select>
                             <label for="floatingSelect">Select one of the Institutes</label>
                         </div>
                     </div>
                 </form>
-                <div class="container">
-                    <ul class="list-group">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
-                    </ul>
-                </div>
+            </div>
+            <div class="col-lg-6">
+                <ul class="list-group">
+                    <li class="list-group-item">An item</li>
+                    <li class="list-group-item">A second item</li>
+                    <li class="list-group-item">A third item</li>
+                    <li class="list-group-item">A fourth item</li>
+                    <li class="list-group-item">And a fifth one</li>
+                </ul>
             </div>
         </div>
     </div>
+</section>
+
 
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
     <!--script>
