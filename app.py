@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import pandas as pd
 import openpyxl
 import pandas as pd
-from AI_masters_germany import utils, clustering, plotting
+from AI_masters_germany import utils, clustering, plotting,map
 from AI_masters_germany.aim import AIM
 from flask import Flask,render_template, request
 import numpy as np
@@ -72,6 +72,15 @@ def institute_types():
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template("institute_types.html", fig_json=fig_json)
+
+@app.route("/map_view")
+def map_view():
+    database = aim.get_database()
+    fig = map.get_map(database)
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template("map_view.html", fig_json=fig_json)
+
 
 @app.route("/lecture_types")
 def lecture_types():
