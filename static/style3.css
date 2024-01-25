@@ -36,6 +36,13 @@ body {
     background-color: #fafbfe;
 }
 
+.chart {
+    width: auto;
+    min-height: 100%;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+}
+
 #sidebar {
     width: 70px;
     min-width: 70px;
@@ -49,6 +56,16 @@ body {
 #sidebar.expand {
     width: 260px;
     min-width: 260px;
+}
+
+#box_1 {
+    background-color: #0e2238;
+
+}
+
+#box_2 {
+    background-color: #a4acb4;
+
 }
 
 .toggle-btn {
