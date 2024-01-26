@@ -52,12 +52,12 @@
                     </fieldset>
                 </form>
             </div>
-            <div class="col-12">
+            <div class="col-lg-6">
                 <form id="searchForm" name="search">
                     <div class="select-container m-3">
                         <div class="form-floating">
                             <select class="form-select custom-select" id="floatingSelect"
-                                aria-label="Floating label select example">
+                                aria-label="Floating label select example" onchange="showListItems(this)">
                                 {%for degree in degree_Name%}
                                     <option>{{degree}}</option>
                                 {% endfor %}
@@ -76,8 +76,8 @@
                     </div>
                 </form>
             </div>
-            <div class="col-lg-6">
-                <ul class="list-group">
+            <div class="col-lg-6 m-3">
+                <ul class="list-group" id="listGroup">
                     <li class="list-group-item">An item</li>
                     <li class="list-group-item">A second item</li>
                     <li class="list-group-item">A third item</li>
@@ -88,7 +88,16 @@
         </div>
     </div>
 </section>
-
+<script>
+       function showListItems(selectElement) {
+        var listGroup = document.getElementById('listGroup');
+        if (selectElement.value !== '') {
+            listGroup.style.display = 'block';
+        } else {
+            listGroup.style.display = 'none';
+        }
+    }
+</script>
 
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
     <!--script>
