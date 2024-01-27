@@ -170,6 +170,23 @@ def search_courses():
     if request.method == "POST":
         search_query=request.form["search_query"]
         top_freq = int(request.form["top_freq"])
+        specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
+        ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
+        ds_rows = database["Degree Name Tokens"].str.contains("Data Science", na=False)
+        da_rows = database["Degree Name Tokens"].str.contains("Data Analytics", na=False)
+        ml_rows = database["Degree Name Tokens"].str.contains("Machine Learning", na=False)
+        other_rows = ~ai_rows & ~ds_rows & ~da_rows & ~ml_rows
+
+        if "AI" in checked_specialisations:
+            specialisation_conditions |= ai_rows
+        if "DS" in checked_specialisations:
+            specialisation_conditions |= ds_rows
+        if "DA" in checked_specialisations:
+            specialisation_conditions |= da_rows
+        if "ML" in checked_specialisations:
+            specialisation_conditions |= ml_rows
+        if "other" in checked_specialisations:
+            specialisation_conditions |= other_rows
         min_credits = int(request.form["min_credits"])
         max_credits = int(request.form["max_credits"])
 
@@ -202,6 +219,7 @@ def search_courses():
         lecture_type = "all"
 
         data = database[:10]
+        checked_specialisations = ["AI", "DS", "DA", "ML", "other"]
     
     fig=plotting.plot_similar_courses(data=data,show_plot=False)
 
@@ -212,7 +230,8 @@ def search_courses():
                            search_query=search_query,
                            top_freq=top_freq,
                            min_credits=min_credits, max_credits=max_credits,
-                           lecture_type=lecture_type) 
+                           lecture_type=lecture_type,
+                           checked_specialisations=checked_specialisations) 
 
 @app.route("/popular_courses", methods=["GET", "POST"])
 def popular_courses():
