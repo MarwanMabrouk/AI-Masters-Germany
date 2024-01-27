@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 import pandas as pd
 from sklearn.metrics import silhouette_score
-
+from sklearn.metrics import pairwise_distances_argmin_min
 from AI_masters_germany.utils import stopwords_removal
 
 
@@ -74,9 +74,20 @@ def cluster_courses(df,
         # Now cluster again, but this time with the estimated optimal k.
         k_means = KMeans(n_clusters=best_k, n_init='auto')
         clusters = k_means.fit_predict(X)
+    labels = k_means.labels_
 
+# Get the centroids
+    centroids = k_means.cluster_centers_
+
+# Find the index of the point closest to the centroid in each cluster
+    closest_points_indices, _ = pairwise_distances_argmin_min(centroids, X)
+
+# Assign the closest points as labels for each cluster
+    cluster_labels = [df.iloc[index]["Course Name"] for index in closest_points_indices]
+    cluster_names=[cluster_labels[label] for label in labels]
     result = pd.DataFrame(X, columns=['Component_1', 'Component_2'])
     result['Cluster'] = clusters
+    result["Cluster Name"]=cluster_names
     result['Course Name'] = df['Course Name']
     result['Degree Name'] = df['Degree Name']
     result['Uni Name'] = df['Uni Name']

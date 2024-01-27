@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import pandas as pd
 import openpyxl
 import pandas as pd
-from AI_masters_germany import utils, clustering, plotting,map
+from AI_masters_germany import utils, clustering, plotting,map,similarity
 from AI_masters_germany.aim import AIM
 from flask import Flask,render_template, request
 import numpy as np
@@ -99,7 +99,7 @@ def course_clustering():
     clusters = aim.get_clustered_courses()
 
     if request.method == "POST":
-
+        top_freq = int(request.form["top_freq"])
         specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
         checked_specialisations = request.form.getlist("specialisation")
         ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
@@ -138,6 +138,7 @@ def course_clustering():
         data = clusters[credits_condition & lecture_type_condition & specialisation_conditions]
 
     else:
+        top_freq=10
         min_credits = 1
         max_credits = int(database["ECTS"].max())
 
@@ -150,13 +151,69 @@ def course_clustering():
     fig = plotting.plot_clusters(data, show_plot=False)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+    grouped_data=data.groupby(["Cluster","Cluster Name"]).size().reset_index(name='Cluster Count').sort_values(by="Cluster Count", ascending=False)
+    fig_density=plotting.plot_popular_courses(grouped_data[:top_freq],show_plot=False)
+    fig_density_html=fig_density.to_html()
     return render_template("course_clustering.html",
                            fig_json=fig_json,
+                           fig_density_html=fig_density_html,
+                           top_freq=top_freq,
                            min_credits=min_credits, max_credits=max_credits,
                            lecture_type=lecture_type,
                            checked_specialisations=checked_specialisations)
 
-  
+@app.route("/search_courses", methods=["GET", "POST"])
+def search_courses():
+    database = aim.get_database()
+    
+
+    if request.method == "POST":
+        search_query=request.form["search_query"]
+        top_freq = int(request.form["top_freq"])
+        min_credits = int(request.form["min_credits"])
+        max_credits = int(request.form["max_credits"])
+
+        credits_condition = (
+            (database["ECTS"] >= min_credits) &
+            (database["ECTS"] <= max_credits)
+        )
+
+        lecture_type = request.form["lecture_type"]
+        if lecture_type == "all":
+            lecture_type_condition = pd.Series([True] * len(database["Type"]))
+        elif lecture_type == "Obligatory":
+            lecture_type_condition = database["Type"] == "Obligatory"
+        else:
+            lecture_type_condition = database["Type"] == "Elective"
+
+        data = database[credits_condition & lecture_type_condition]
+        search_results=similarity.text_similarity(df=data,query=search_query,top_k=top_freq)
+                                              #sentence_transformer_model='unicamp-dl/mMiniLM-L6-v2-mmarco-v2')
+        
+        data=data.loc[search_results[1]]
+        data["score"]=search_results[0]
+    
+    else:
+        search_query=""
+        top_freq=10
+        min_credits = 1
+        max_credits = int(database["ECTS"].max())
+
+        lecture_type = "all"
+
+        data = database[:10]
+    
+    fig=plotting.plot_similar_courses(data=data,show_plot=False)
+
+    fig_json=fig.to_plotly_json()
+    
+    return render_template("search_courses.html",
+                           fig_json=fig_json,
+                           search_query=search_query,
+                           top_freq=top_freq,
+                           min_credits=min_credits, max_credits=max_credits,
+                           lecture_type=lecture_type) 
+
 @app.route("/popular_courses", methods=["GET", "POST"])
 def popular_courses():
 

@@ -95,7 +95,32 @@ def plot_clusters(clustering_result, show_plot=True):
 
     return fig
 
-
-def plot_popular_courses(data, show_plot):
+def plot_popular_courses(data, show_plot=True):
     # todo: Fill with code
-    return None
+    fig=px.bar(
+        data,
+        x="Cluster Name",
+        y="Cluster Count",
+        color="Cluster",
+        title="Cluster Density",
+        hover_data=["Cluster Name"]
+    )
+    if show_plot:
+        fig.show()
+
+    return fig
+
+def plot_similar_courses(data,show_plot):
+    fig = go.Figure(data=[go.Table(
+    header=dict(values=list(data.columns),
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=data.transpose().values.tolist(),
+               fill_color='lavender',
+               align='left'))
+])
+
+    if show_plot:
+        fig.show()
+    
+    return fig

@@ -19,10 +19,24 @@
             <div class="col-12">
                     <div id='chart' class='chart m-4 mx-auto' >
                     </div>
+                    
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 ">
+                                <!--div class="container m-5 border p-3"-->
+                                        <div id='chart' class='chart' style='max-height: 500px;'>
+                                            {{ fig_density_html | safe}};</div>
+                                    </div>
+                                </div>
+                            </div>
             </div>
             <div class="col-12">
                 <form method="POST">
                     <fieldset class="m-3">
+                        <div class="m-3">
+                            <label for="top_freq" class="form-label">Select Top k Clusters: </label>
+                            <input type="number" id="top_freq" name="top_freq" value="{{ top_freq }}">
+                        </div>
                         <legend>Choose the Specialisation:</legend>
                         <div class="form-check">
                             <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckDefault" value="AI" {% if 'AI' in checked_specialisations %}checked{% endif %} >
