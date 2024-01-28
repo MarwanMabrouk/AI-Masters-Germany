@@ -171,6 +171,7 @@ def search_courses():
         search_query=request.form["search_query"]
         top_freq = int(request.form["top_freq"])
         specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
+        checked_specialisations = request.form.getlist("specialisation")
         ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
         ds_rows = database["Degree Name Tokens"].str.contains("Data Science", na=False)
         da_rows = database["Degree Name Tokens"].str.contains("Data Analytics", na=False)
@@ -203,29 +204,32 @@ def search_courses():
         else:
             lecture_type_condition = database["Type"] == "Elective"
 
-        data = database[credits_condition & lecture_type_condition]
-        search_results=similarity.text_similarity(df=data,query=search_query,top_k=top_freq)
-                                              #sentence_transformer_model='unicamp-dl/mMiniLM-L6-v2-mmarco-v2')
-        
-        data=data.loc[search_results[1]]
+        data = database[credits_condition & lecture_type_condition & specialisation_conditions]
+        search_results=similarity.text_similarity(df=data,query=search_query,top_k=top_freq,
+                                              sentence_transformer_model='sentence-transformers/msmarco-distilbert-multilingual-en-de-v2-tmp-lng-aligned')
+    
+        data=data.iloc[search_results[1]]
+        data["Similarity Score"]=[f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
         data["score"]=search_results[0]
+        fig=plotting.plot_similar_courses(data=data,show_plot=False)
+        fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        data=data[["Uni Name","Course Name","Course Description","Goals","Similarity Score"]].reset_index(drop=True)
+        table_html=data.to_html()
+        
     
     else:
         search_query=""
         top_freq=10
         min_credits = 1
         max_credits = int(database["ECTS"].max())
-
+        table_html=None
         lecture_type = "all"
-
-        data = database[:10]
+        fig_json=None
         checked_specialisations = ["AI", "DS", "DA", "ML", "other"]
     
-    fig=plotting.plot_similar_courses(data=data,show_plot=False)
-
-    fig_json=fig.to_plotly_json()
     
     return render_template("search_courses.html",
+                           table_html=table_html,
                            fig_json=fig_json,
                            search_query=search_query,
                            top_freq=top_freq,
@@ -233,46 +237,6 @@ def search_courses():
                            lecture_type=lecture_type,
                            checked_specialisations=checked_specialisations) 
 
-@app.route("/popular_courses", methods=["GET", "POST"])
-def popular_courses():
-
-    database = aim.get_database()
-    clusters = aim.get_clustered_courses()
-
-    if request.method == "POST":
-        min_credits = int(request.form["min_credits"])
-        max_credits = int(request.form["max_credits"])
-
-        credits_condition = (
-            (database["ECTS"] >= min_credits) &
-            (database["ECTS"] <= max_credits)
-        )
-
-        lecture_type = request.form["lecture_type"]
-        if lecture_type == "all":
-            lecture_type_condition = pd.Series([True] * len(database["Type"]))
-        elif lecture_type == "Obligatory":
-            lecture_type_condition = database["Type"] == "Obligatory"
-        else:
-            lecture_type_condition = database["Type"] == "Elective"
-
-        data = clusters[credits_condition & lecture_type_condition]  # todo: adapt for popular courses instead of clustering
-
-    else:
-        min_credits = 1
-        max_credits = int(database["ECTS"].max())
-
-        lecture_type = "all"
-
-        data = clusters
-
-    fig = plotting.plot_popular_courses(data, show_plot=False)
-    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-    return render_template("popular_courses.html",
-                           fig_json=fig_json,
-                           min_credits=min_credits, max_credits=max_credits,
-                           lecture_type=lecture_type)
 
 
 if __name__ == '__main__':

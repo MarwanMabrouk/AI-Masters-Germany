@@ -99,8 +99,8 @@ def plot_popular_courses(data, show_plot=True):
     # todo: Fill with code
     fig=px.bar(
         data,
-        x="Cluster Name",
-        y="Cluster Count",
+        x="Cluster Count",
+        y="Cluster Name",
         color="Cluster",
         title="Cluster Density",
         hover_data=["Cluster Name"]
@@ -111,15 +111,16 @@ def plot_popular_courses(data, show_plot=True):
     return fig
 
 def plot_similar_courses(data,show_plot):
-    fig = go.Figure(data=[go.Table(
-    header=dict(values=list(data.columns),
-                fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=data.transpose().values.tolist(),
-               fill_color='lavender',
-               align='left'))
-])
-
+    
+    fig=px.bar(
+        data,
+        x="Course Name",
+        y="score",
+        color="Course Name",
+        title="Course Similarity Plot",
+        hover_data=["Uni Name","Course Description","Goals"]
+    )
+    print(data["Course Name"])
     if show_plot:
         fig.show()
     
