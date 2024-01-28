@@ -15,68 +15,54 @@
 </section>
 <section>
     <div class="container-fluid">
-        <div class="row" >
-            <div class="col-12">
-                    <div id='chart' class='chart m-4 mx-auto' >
-                    </div>
-                    
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12 ">
-                                <!--div class="container m-5 border p-3"-->
-                                        <div id='chart' class='chart' style='max-height: 500px;'>
-                                            {{ fig_density_html | safe}};</div>
-                                    </div>
-                                </div>
-                            </div>
-            </div>
-            <div class="col-12">
-                <form method="POST">
+        <div class="row g-4">
+            <form method="post" class="row m-2">
+                <div class="col-12 col-md-4">
                     <fieldset class="m-3">
-                        <div class="m-3">
-                            <label for="top_freq" class="form-label">Select Top k Clusters: </label>
-                            <input type="number" id="top_freq" name="top_freq" value="{{ top_freq }}">
-                        </div>
                         <legend>Choose the Specialisation:</legend>
                         <div class="form-check">
-                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckDefault" value="AI" {% if 'AI' in checked_specialisations %}checked{% endif %} >
+                            <input class="form-check-input" name="specialisation" type="checkbox"
+                                id="flexCheckDefault" value="AI" {% if 'AI' in checked_specialisations
+                                %}checked{% endif %}>
                             <label class="form-check-label" for="flexCheckDefault">
                                 Artificial Intelligence
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked1" value="DS" {% if 'DS' in checked_specialisations %}checked{% endif %} >
+                            <input class="form-check-input" name="specialisation" type="checkbox"
+                                id="flexCheckChecked1" value="DS" {% if 'DS' in checked_specialisations
+                                %}checked{% endif %}>
                             <label class="form-check-label" for="flexCheckChecked1">
                                 Data Science
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked2" value="AD" {% if 'DA' in checked_specialisations %}checked{% endif %} >
+                            <input class="form-check-input" name="specialisation" type="checkbox"
+                                id="flexCheckChecked2" value="AD" {% if 'DA' in checked_specialisations
+                                %}checked{% endif %}>
                             <label class="form-check-label" for="flexCheckChecked2">
                                 Data Analytics
                             </label>
                         </div>
-                         <div class="form-check">
-                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked3" value="ML" {% if 'ML' in checked_specialisations %}checked{% endif %} >
+                        <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"
+                                id="flexCheckChecked3" value="ML" {% if 'ML' in checked_specialisations
+                                %}checked{% endif %}>
                             <label class="form-check-label" for="flexCheckChecked3">
                                 Machine Learning
                             </label>
                         </div>
-                         <div class="form-check">
-                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked4" value="other" {% if 'other' in checked_specialisations %}checked{% endif %} >
+                        <div class="form-check">
+                            <input class="form-check-input" name="specialisation" type="checkbox"
+                                id="flexCheckChecked4" value="other" {% if 'other' in
+                                checked_specialisations %}checked{% endif %}>
                             <label class="form-check-label" for="flexCheckChecked4">
                                 Other
                             </label>
                         </div>
                     </fieldset>
-                    <div class="m-3">
-                        <label for="min_credits" class="form-label">Select Min. ECTS: </label>
-                        <input type="number" id="min_credits" name="min_credits" value="{{ min_credits }}">
-                    </div>
-                    <div class="m-3">
-                        <label for="max_credits" class="form-label">Select Max. ECTS: </label>
-                        <input type="number" id="max_credits" name="max_credits" value="{{ max_credits }}">
-                    </div>
+                </div>
+                <div class="col-12 col-md-4">
                     <fieldset class="m-3">
                         <legend>Choose the type of Clusters to see in the Chart: </legend>
                             <div class="form-check">
@@ -98,9 +84,36 @@
                                 </label>
                             </div>
                     </fieldset>
-                    <button class="btn btn-primary m-3" type="submit">Update plot</button>
-
-                </form>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="m-3">
+                        <label for="top_freq" class="form-label">Select Top k Clusters: </label>
+                        <input type="number" id="top_freq" name="top_freq" value="{{ top_freq }}">
+                    </div>
+                    <div class="m-3">
+                        <label for="min_credits" class="form-label">Select Min. ECTS: </label>
+                        <input type="number" id="min_credits" name="min_credits" value="{{ min_credits }}">
+                    </div>
+                    <div class="m-3">
+                        <label for="max_credits" class="form-label">Select Max. ECTS: </label>
+                        <input type="number" id="max_credits" name="max_credits" value="{{ max_credits }}">
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <button class="btn btn-primary m-3 ms-auto" type="submit">Update plot</button>
+                </div>
+            </form>
+        </div>
+        <div class="row" >
+            <div class="col-12">
+                <div id='chart' class='chart m-4 mx-auto' >
+                </div>
+            </div>
+            <div class="col-12 ">
+                    <!--div class="container m-5 border p-3"-->
+                <div id='chart' class='chart' style='max-height: 500px;'>
+                    {{ fig_density_html | safe}}
+                </div>
             </div>
         </div>
     </div>
