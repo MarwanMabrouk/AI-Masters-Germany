@@ -27,17 +27,3 @@ def text_similarity(df,
     
     return results
 
-def plot_similar_courses(data,show_plot):
-    fig = go.Figure(data=[go.Table(
-    header=dict(values=list(data.columns),
-                fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=data.transpose().values.tolist(),
-               fill_color='lavender',
-               align='left'))
-])
-
-    if show_plot:
-        fig.show()
-    
-    return fig
