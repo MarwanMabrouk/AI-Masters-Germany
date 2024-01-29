@@ -31,6 +31,8 @@ print('Done connecting to database!')
 app = Flask(__name__)
 aim = AIM(collection_object=collection)
 
+course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
+course_clustering_thread.start()
 
 def get_data():
     course_name=collection.distinct("Course Name")
@@ -240,9 +242,5 @@ def search_courses():
 
 
 if __name__ == '__main__':
-    DATASET_PATH = './dataset.csv'
-    course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
-    course_clustering_thread.start()
-
     app.debug = True
     app.run()
