@@ -55,15 +55,15 @@ def plot_lecture_types(database, show_plot):
 
     fig = px.bar(
         lectures,
-        x="Name",
-        y="Amount",
+        x="Amount",
+        y="Name",
         color="Type",
         barmode="group"
     )
 
     fig.update_layout(
-        xaxis_title="Study degree",
-        yaxis_title="Entries in the database"
+        xaxis_title="Entries in the database",
+        yaxis_title="Study degree"
     )
 
     if show_plot:
