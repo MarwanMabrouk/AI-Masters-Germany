@@ -57,22 +57,13 @@
                 <form id="searchForm" name="search">
                     <div class="select-container m-3">
                         <div class="form-floating">
-                            <select class="form-select custom-select" id="floatingSelect"
+                            <select class="form-select custom-select" id="degreeSelect"
                                 aria-label="Floating label select example" onchange="showListItems(this)">
-                                {%for degree in degree_Name %}
-                                    <option>{{degree}}</option>
+                                {%for choice in degree_choices %}
+                                    <option>{{choice}}</option>
                                 {% endfor %}
                             </select>
-                            <label for="floatingSelect">Select one of the Master Programs</label>
-                        </div>
-                        <div class="form-floating">
-                            <select class="form-select custom-select" id="floatingSelect2"
-                                aria-label="Floating label select example">
-                                {%for uin in uft%}
-                                    <option>{{uin}}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="floatingSelect">Select one of the Institutes</label>
+                            <label for="degreeSelect">Select one of the Master Programs</label>
                         </div>
                     </div>
                 </form>
@@ -109,24 +100,6 @@
     </script-->
    <script>
     document.getElementById('floatingSelect').addEventListener('change', function () {
-        var selectedValue = this.value;
-        fetch('/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ selectedValue: selectedValue })
-        })
-        .then(response => response.json())
-        .then(data => {
-            updateListItems(data); // Call a function to update the list items
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-
-    document.getElementById('floatingSelect2').addEventListener('change', function () {
         var selectedValue = this.value;
         fetch('/search', {
             method: 'POST',
