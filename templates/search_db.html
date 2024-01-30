@@ -101,7 +101,7 @@
    <script>
     document.getElementById('degreeSelect').addEventListener('change', function () {
         var selectedValue = this.value;
-        fetch('/search', {
+        fetch('/search-update_selected_degree', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
