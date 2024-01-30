@@ -33,7 +33,7 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked2" value="AD" {% if 'DA' in checked_specialisations %}checked{% endif %} >
+                            <input class="form-check-input" name="specialisation" type="checkbox"  id="flexCheckChecked2" value="DA" {% if 'DA' in checked_specialisations %}checked{% endif %} >
                             <label class="form-check-label" for="flexCheckChecked2">
                                 Data Analytics
                             </label>
@@ -59,7 +59,7 @@
                         <div class="form-floating">
                             <select class="form-select custom-select" id="floatingSelect"
                                 aria-label="Floating label select example" onchange="showListItems(this)">
-                                {%for degree in degree_Name%}
+                                {%for degree in degree_Name %}
                                     <option>{{degree}}</option>
                                 {% endfor %}
                             </select>
@@ -100,48 +100,62 @@
     }
 </script>
 
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!--script>
         $(".sidebar ul li").on('click', function () {
             $(".sidebar ul li.active").removeClass('active');
             $(this).addClass("active");
         });
     </script-->
-    <!--script>
-        document.getElementById('floatingSelect').addEventListener('change', function () {
-            var selectedValue = this.value;
-            fetch('/search',{
-                method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ selectedValue: selectedValue })
-            })
-            .then(response => response.json())
-            .then(data =>{
-                    console.log(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+   <script>
+    document.getElementById('floatingSelect').addEventListener('change', function () {
+        var selectedValue = this.value;
+        fetch('/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ selectedValue: selectedValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateListItems(data); // Call a function to update the list items
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
-        document.getElementById('floatingSelect2').addEventListener('change', function () {
-            var selectedValue = this.value;
-            fetch('/earch', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ selectedValue: selectedValue })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    });
+
+    document.getElementById('floatingSelect2').addEventListener('change', function () {
+        var selectedValue = this.value;
+        fetch('/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ selectedValue: selectedValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateListItems(data); // Call a function to update the list items
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
-    </script-->
+    });
+
+    function updateListItems(data) {
+        var listGroup = document.getElementById('listGroup');
+        // Assuming data is an array of strings, update list items accordingly
+        listGroup.innerHTML = ''; // Clear existing list items
+        data.forEach(function(item) {
+            var listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.textContent = item;
+            listGroup.appendChild(listItem);
+        });
+    }
+</script>
+
 
 {% endblock content %}

@@ -8,19 +8,22 @@ class AIM:
     def __init__(self, collection_object):
         self.__collection_object = collection_object
         self.__database = pd.DataFrame(list(collection_object.find()))
-        self.__database = utils.database_preprocessing(self.__database)
+        self.__preprocessed_database = utils.database_preprocessing(self.__database)
         self.__activated_clustering = False
         self.__course_clusters = None
 
-    def get_database(self):
-        return self.__database
+    def get_database(self, unprocessed=False):
+        if unprocessed:
+            return self.__database
+        else:
+            return self.__preprocessed_database
 
 
     def cluster_courses(self, n_clusters='auto', k_ranges=np.linspace(80, 121, 40)):
         self.__activated_clustering = True
 
         self.__course_clusters = clustering.cluster_courses(
-            df=self.__database,
+            df=self.__preprocessed_database,
             n_clusters=n_clusters,
             k_ranges=k_ranges
         )
