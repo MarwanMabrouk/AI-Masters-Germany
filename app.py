@@ -59,12 +59,30 @@ def third_page():
 
 @app.route("/search")
 def second_page():
-    database = aim.get_database().copy()
+    database = aim.get_database(unprocessed=True).copy()
     database["degree_choices"] = database["Degree Name"] + " - " + database["Uni Name"]
     degree_choices = database["degree_choices"].unique()
     degree_choices = np.sort(degree_choices)
 
     return render_template("search_db.html", degree_choices=degree_choices)
+
+
+@app.route('/search-update_selected_degree', methods=['POST'])
+def search__update_selected_degree():
+
+    data = request.get_json()
+    selected_degree = data.get('selectedValue')
+
+    database = aim.get_database(unprocessed=True).copy()
+    database["degree_choices"] = database["Degree Name"] + " - " + database["Uni Name"]
+
+    courses = database[database["degree_choices"] == selected_degree]["Course Name"].to_list()
+    courses.sort()
+
+    return jsonify(courses)
+
+#@app.route("/search")
+#def second_page():
     #course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
     #return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
     #                       uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
