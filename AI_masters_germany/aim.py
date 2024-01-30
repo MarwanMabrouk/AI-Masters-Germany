@@ -2,8 +2,8 @@ import pandas as pd
 from AI_masters_germany import utils, clustering
 import numpy as np
 import time
-
-
+import warnings
+warnings.filterwarnings('ignore')
 class AIM:
     def __init__(self, collection_object):
         self.__collection_object = collection_object

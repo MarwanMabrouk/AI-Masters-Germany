@@ -30,7 +30,7 @@ def cluster_courses(df,
                      Is only used when n_clusters is set to True!
     :return: A pandas Dataframe with the columns: 'Component_1', 'Component_2', 'Cluster', 'Course Name'
     """
-
+    print('Start clustering...')
     if reduction_method.lower() not in ['tsne', 'pca']:
         raise ValueError('The only valid dimensionality reduction methods are "pca" and "tsne"!')
 
@@ -64,7 +64,7 @@ def cluster_courses(df,
             k_means = KMeans(n_clusters=k, n_init='auto')
             clusters = k_means.fit_predict(X)
             score = silhouette_score(X, clusters)
-            print(f'k: {k} -> silhouette score: {score}')
+            #print(f'k: {k} -> silhouette score: {score}')
             if score > best_score:
                 best_k = k
                 best_score = score
@@ -91,5 +91,5 @@ def cluster_courses(df,
     result['Course Name'] = df['Course Name']
     result['Degree Name'] = df['Degree Name']
     result['Uni Name'] = df['Uni Name']
-
+    print('Clustering finished!')
     return result
