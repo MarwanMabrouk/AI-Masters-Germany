@@ -30,12 +30,9 @@ def get_data():
     course_name=collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
     uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
-    # ula added this 4 lines
-    # myqueryunis = {"Uni/Fachhochschule/TU": "Universität"}
-    # unis=collection.find(myqueryunis)
-    # unicount=len(list(unis))
-    # unicount = collection.count_documents(myqueryunis)
-    # print(f"Number of documents: {unicount}")
+    uni_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU": "Universität"}))
+    tu_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"TU"}))
+    hochschule_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"Hochschule"}))
 
     #get no of unique Uni
     cuft = len(collection.distinct("Uni Name"))
@@ -46,14 +43,14 @@ def get_data():
     #get no of unique Course Name
     ccn = collection.count_documents({})
 
-    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
+    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount
 
 
-@app.route("/")
+@app.route("/",methods=["GET", "POST"])
 def firstPage():
-    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
+    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount = get_data()
     return render_template("firstPage.html", course_name=course_name, degree_Name=degree_Name,
-                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
+                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft,uni_amount=uni_amount,tu_amount=tu_amount,hochschule_amount=hochschule_amount)
 
 @app.route("/visualization")
 def third_page():
