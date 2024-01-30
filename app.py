@@ -4,7 +4,7 @@ import openpyxl
 import pandas as pd
 from AI_masters_germany import utils, clustering, plotting,map,similarity
 from AI_masters_germany.aim import AIM
-from flask import Flask,render_template, request
+from flask import Flask,render_template, request, jsonify
 import numpy as np
 import json
 import plotly
@@ -56,11 +56,18 @@ def firstPage():
 def third_page():
     return render_template("third_page.html")
 
+
 @app.route("/search")
 def second_page():
-    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
-    return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
-                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
+    database = aim.get_database().copy()
+    database["degree_choices"] = database["Degree Name"] + " - " + database["Uni Name"]
+    degree_choices = database["degree_choices"].unique()
+    degree_choices = np.sort(degree_choices)
+
+    return render_template("search_db.html", degree_choices=degree_choices)
+    #course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
+    #return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
+    #                       uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
 @app.route("/institute_types")
 def institute_types():
 
