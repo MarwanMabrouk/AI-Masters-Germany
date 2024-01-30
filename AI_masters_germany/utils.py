@@ -39,18 +39,21 @@ def database_preprocessing(df, remove_stopwords=False):
     :param remove_stopwords: if True, remove stopwords from 'Course Description' and 'Goals' columns.
     :return: A preprocessed pandas dataframe.
     """
-    # Remove most special characters
-    df = df.replace(to_replace=r'[^A-Za-z0-9äÄöÖüÜ.,-: ]', value='', regex=True)
+    try:
+        # Remove most special characters
+        df = df.replace(to_replace=r'[^A-Za-z0-9äÄöÖüÜ.,-: ]', value='', regex=True)
 
-    df['Type'] = df['Type'].fillna('Obligatory')  # Default for N.A. values is that the course is mandatory
-    df['ECTS'] = pd.to_numeric(df['ECTS'])
+        df['Type'] = df['Type'].fillna('Obligatory')  # Default for N.A. values is that the course is mandatory
+        df['ECTS'] = pd.to_numeric(df['ECTS'])
 
-    # Remove entries with missing values. Important that this is done before stopword removal!
-    df.dropna(inplace=True)
-    df.reset_index(drop=True, inplace=True)
+        # Remove entries with missing values. Important that this is done before stopword removal!
+        df.dropna(inplace=True)
+        df.reset_index(drop=True, inplace=True)
 
-    if remove_stopwords:
-        df['Course Description'] = df['Course Description'].apply(lambda x: stopwords_removal(x))
-        df['Goals'] = df['Goals'].apply(lambda x: stopwords_removal(x))
-
+        if remove_stopwords:
+            df['Course Description'] = df['Course Description'].apply(lambda x: stopwords_removal(x))
+            df['Goals'] = df['Goals'].apply(lambda x: stopwords_removal(x))
+    except Exception as e:
+        print(e)
+        print('Error during database preprocessing. Please check your database and try again.')
     return df
