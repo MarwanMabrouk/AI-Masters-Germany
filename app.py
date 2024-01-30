@@ -38,6 +38,12 @@ def get_data():
     course_name=collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
     uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
+    # ula added this 4 lines
+    # myqueryunis = {"Uni/Fachhochschule/TU": "Universität"}
+    # unis=collection.find(myqueryunis)
+    # unicount=len(list(unis))
+    # unicount = collection.count_documents(myqueryunis)
+    # print(f"Number of documents: {unicount}")
 
     #get no of unique Uni
     cuft = len(collection.distinct("Uni Name"))
