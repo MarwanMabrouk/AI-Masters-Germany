@@ -6,7 +6,7 @@ def get_map(database):
     # Create scatter map
     fig = px.scatter_geo(database, lat='Latitude', lon='Longitude',
                         hover_name='Uni Name', #size='mag',
-                        title='Data Collected',
+                        title='Geographical distribution of universities in Germany',
                         center=dict(lat=51.0057, lon=13.7274),
                         scope='europe')
 
