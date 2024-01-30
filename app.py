@@ -4,7 +4,7 @@ import openpyxl
 import pandas as pd
 from AI_masters_germany import utils, clustering, plotting,map,similarity
 from AI_masters_germany.aim import AIM
-from flask import Flask,render_template, request
+from flask import Flask,render_template, request, jsonify
 import numpy as np
 import json
 import plotly
@@ -30,6 +30,9 @@ def get_data():
     course_name=collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
     uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
+    uni_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU": "Universität"}))
+    tu_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"TU"}))
+    hochschule_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"Hochschule"}))
 
     #get no of unique Uni
     cuft = len(collection.distinct("Uni Name"))
@@ -40,24 +43,49 @@ def get_data():
     #get no of unique Course Name
     ccn = collection.count_documents({})
 
-    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft
+    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount
 
 
-@app.route("/")
+@app.route("/",methods=["GET", "POST"])
 def firstPage():
-    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
+    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount = get_data()
     return render_template("firstPage.html", course_name=course_name, degree_Name=degree_Name,
-                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
+                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft,uni_amount=uni_amount,tu_amount=tu_amount,hochschule_amount=hochschule_amount)
 
 @app.route("/visualization")
 def third_page():
     return render_template("third_page.html")
 
+
 @app.route("/search")
 def second_page():
-    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
-    return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
-                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
+    database = aim.get_database(unprocessed=True).copy()
+    database["degree_choices"] = database["Degree Name"] + " - " + database["Uni Name"]
+    degree_choices = database["degree_choices"].unique()
+    degree_choices = np.sort(degree_choices)
+
+    return render_template("search_db.html", degree_choices=degree_choices)
+
+
+@app.route('/search-update_selected_degree', methods=['POST'])
+def search__update_selected_degree():
+
+    data = request.get_json()
+    selected_degree = data.get('selectedValue')
+
+    database = aim.get_database(unprocessed=True).copy()
+    database["degree_choices"] = database["Degree Name"] + " - " + database["Uni Name"]
+
+    courses = database[database["degree_choices"] == selected_degree]["Course Name"].to_list()
+    courses.sort()
+
+    return jsonify(courses)
+
+#@app.route("/search")
+#def second_page():
+    #course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
+    #return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
+    #                       uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
 @app.route("/institute_types")
 def institute_types():
 
