@@ -12,15 +12,20 @@ if __name__ == "__main__":
     assert response.status_code == 200, 'Wrong status code '+ str(response.status_code)
     print("Google Sheets Response",response.status_code)
     data = response.content
-    df = pd.read_csv(BytesIO(data), index_col=0)
+    df = pd.read_csv(BytesIO(data))
     print(df.head(10))
     client = MongoClient(CONNECTION_STRING)
     client.drop_database('data')
     print('Database deleted')
     db = client['data']
     collection = db['data']
+
     state = collection.insert_many(df.to_dict('records'))
-    print(state)
+    print(df['Uni Name'].unique())
+    #print df info
+    print(df.info())
+    #print column names
+    print(df.columns)
     if state:
         print('Database created successfully')
     else:
