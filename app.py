@@ -4,6 +4,7 @@ import openpyxl
 import pandas as pd
 from AI_masters_germany import utils, clustering, plotting,map,similarity
 from AI_masters_germany.aim import AIM
+from sentence_transformers import SentenceTransformer, util
 from flask import Flask,render_template, request
 import numpy as np
 import json
@@ -22,7 +23,11 @@ print('Done connecting to database!')
 
 app = Flask(__name__)
 aim = AIM(collection_object=collection)
-
+print('Loading sentence transformer model...')
+sentence_transformer_model = 'sentence-transformers/msmarco-distilbert-multilingual-en-de-v2-tmp-lng-aligned'
+embedder = SentenceTransformer(sentence_transformer_model)
+print('Done loading sentence transformer model!')
+corpus_embeddings=None
 course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
 course_clustering_thread.start()
 
@@ -199,8 +204,12 @@ def search_courses():
             lecture_type_condition = database["Type"] == "Elective"
 
         data = database[credits_condition & lecture_type_condition & specialisation_conditions]
-        search_results=similarity.text_similarity(df=data,query=search_query,top_k=top_freq,
-                                              sentence_transformer_model='sentence-transformers/msmarco-distilbert-multilingual-en-de-v2-tmp-lng-aligned')
+        global corpus_embeddings
+        if corpus_embeddings is None:
+            print('Running Corpus Embedding')
+            corpus_embeddings=similarity.encode_text(df=data,embedder=embedder,features=['Course Name','Course Description','Goals'])
+            print('Done Embedding')
+        search_results=similarity.text_similarity(df=data,query=search_query,embedder=embedder,corpus_embeddings=corpus_embeddings,top_k=top_freq)
     
         data=data.iloc[search_results[1]]
         data["Similarity Score"]=[f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
