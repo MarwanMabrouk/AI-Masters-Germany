@@ -202,42 +202,9 @@ def search_courses():
 
     if request.method == "POST":
         search_query=request.form["search_query"]
-        top_freq = int(request.form["top_freq"])
-        specialisation_conditions = pd.Series([False] * len(database["Uni Name"]))
-        checked_specialisations = request.form.getlist("specialisation")
-        ai_rows = database["Degree Name Tokens"].str.contains("Artificial Intelligence", na=False)
-        ds_rows = database["Degree Name Tokens"].str.contains("Data Science", na=False)
-        da_rows = database["Degree Name Tokens"].str.contains("Data Analytics", na=False)
-        ml_rows = database["Degree Name Tokens"].str.contains("Machine Learning", na=False)
-        other_rows = ~ai_rows & ~ds_rows & ~da_rows & ~ml_rows
+        top_freq = 10
 
-        if "AI" in checked_specialisations:
-            specialisation_conditions |= ai_rows
-        if "DS" in checked_specialisations:
-            specialisation_conditions |= ds_rows
-        if "DA" in checked_specialisations:
-            specialisation_conditions |= da_rows
-        if "ML" in checked_specialisations:
-            specialisation_conditions |= ml_rows
-        if "other" in checked_specialisations:
-            specialisation_conditions |= other_rows
-        min_credits = int(request.form["min_credits"])
-        max_credits = int(request.form["max_credits"])
-
-        credits_condition = (
-            (database["ECTS"] >= min_credits) &
-            (database["ECTS"] <= max_credits)
-        )
-
-        lecture_type = request.form["lecture_type"]
-        if lecture_type == "all":
-            lecture_type_condition = pd.Series([True] * len(database["Type"]))
-        elif lecture_type == "Obligatory":
-            lecture_type_condition = database["Type"] == "Obligatory"
-        else:
-            lecture_type_condition = database["Type"] == "Elective"
-
-        data = database[credits_condition & lecture_type_condition & specialisation_conditions]
+        data = database
         global corpus_embeddings
         if corpus_embeddings is None:
             print('Running Corpus Embedding')
@@ -268,11 +235,7 @@ def search_courses():
     return render_template("search_courses.html",
                            table_html=table_html,
                            fig_json=fig_json,
-                           search_query=search_query,
-                           top_freq=top_freq,
-                           min_credits=min_credits, max_credits=max_credits,
-                           lecture_type=lecture_type,
-                           checked_specialisations=checked_specialisations) 
+                           search_query=search_query,) 
 
 
 
