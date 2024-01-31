@@ -5,7 +5,7 @@ import pandas as pd
 from AI_masters_germany import utils, clustering, plotting,map,similarity
 from AI_masters_germany.aim import AIM
 from sentence_transformers import SentenceTransformer, util
-from flask import Flask,render_template, request
+from flask import Flask,render_template, request,jsonify
 import numpy as np
 import json
 import plotly
