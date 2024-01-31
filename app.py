@@ -42,9 +42,15 @@ def get_data():
     #get no of unique Uni
     cuft = len(collection.distinct("Uni Name"))
 
-    #get no of unique Degree 
-    cdn = len(collection.distinct("Degree Name"))
-    
+    #get no of unique Degree Uni Pairs 
+    result = collection.aggregate( 
+            [
+                {"$group": { "_id": { "Uni Name": "$Uni Name", "Degree Name": "$Degree Name" } } }
+            ]
+        )
+    cdn = 0
+    for i in result:
+        cdn += 1
     #get no of unique Course Name
     ccn = collection.count_documents({})
 
