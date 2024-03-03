@@ -21,7 +21,7 @@
             <div class="row text-center g-4">
                 <div class="col-md ">
                     <!--div class="container m-5 border p-3"-->
-                    <div class="container m-1 mx-auto" >
+                    <div class="container m-1 mx-auto" id="ChartDiv">
                         <div id='chart' class='chart' style="min-width: 1200px; width: auto;" ></div>
                     </div>
                 </div>
@@ -35,5 +35,26 @@
     <script>
          var graph = {{ fig_json | safe}};
         Plotly.plot("chart", graph, {});
+    </script>
+
+    <script>
+      window.addEventListener("resize", function() {
+        var container_width = document.getElementById("ChartDiv").offsetWidth;
+        var container_height = document.getElementById("ChartDiv").offsetHeight;
+
+        if (container_width < 300) {
+            container_width = 300;
+        }
+
+        if (container_height < 100) {
+            container_height = 100;
+        }
+
+        Plotly.relayout("chart", {
+          width: container_width,
+          height: container_height
+        });
+
+      });
     </script>
 {% endblock content %}
