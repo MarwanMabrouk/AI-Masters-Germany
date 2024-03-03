@@ -36,7 +36,9 @@ body {
     background-color: #fafbfe;
 }
 
+
 .chart {
+    width: 100%; /* added new*/
     min-width: 100vh;
     min-height: auto;
     transition: all 0.35s ease-in-out;
@@ -196,6 +198,10 @@ hr{
 .form-label {
    font-weight: bold;
 }
-
-
-
+/* new added*/
+@media (max-width: 767.98px) {
+    .flex-md-start {
+        justify-content: center !important;
+        text-align: center;
+    }
+}
