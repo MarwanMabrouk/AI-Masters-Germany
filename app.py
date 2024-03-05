@@ -92,11 +92,7 @@ def search__update_selected_degree():
 
     return jsonify(courses)
 
-#@app.route("/search")
-#def second_page():
-    #course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft = get_data()
-    #return render_template("second_page.html", course_name=course_name, degree_Name=degree_Name,
-    #                       uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft)
+
 @app.route("/institute_types")
 def institute_types():
 
@@ -127,7 +123,7 @@ def lecture_types():
 
 @app.route("/course_clustering", methods=["GET", "POST"])
 def course_clustering():
-
+    
     database = aim.get_database()
     clusters = aim.get_clustered_courses()
 
@@ -197,9 +193,8 @@ def course_clustering():
 
 @app.route("/search_courses", methods=["GET", "POST"])
 def search_courses():
-    database = aim.get_database()
     
-
+    database = aim.get_database()
     if request.method == "POST":
         search_query=request.form["search_query"]
         top_freq = 10
@@ -215,8 +210,6 @@ def search_courses():
         data=data.iloc[search_results[1]]
         data["Similarity Score"]=[f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
         data["score"]=search_results[0]
-        fig=plotting.plot_similar_courses(data=data,show_plot=False)
-        fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
         data=data[["Uni Name","Course Name","Course Description","Goals","Similarity Score"]].reset_index(drop=True)
         table_html=data.to_html()
         
@@ -224,17 +217,11 @@ def search_courses():
     else:
         search_query=""
         top_freq=10
-        min_credits = 1
-        max_credits = int(database["ECTS"].max())
         table_html=None
-        lecture_type = "all"
-        fig_json=None
-        checked_specialisations = ["AI", "DS", "DA", "ML", "other"]
     
     
     return render_template("search_courses.html",
                            table_html=table_html,
-                           fig_json=fig_json,
                            search_query=search_query,) 
 
 

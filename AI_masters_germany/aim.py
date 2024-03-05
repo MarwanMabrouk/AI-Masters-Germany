@@ -5,6 +5,8 @@ import time
 import warnings
 warnings.filterwarnings('ignore')
 class AIM:
+    """Class that handles course clustering features
+    """    
     def __init__(self, collection_object):
         self.__collection_object = collection_object
         self.__database = pd.DataFrame(list(collection_object.find()))
@@ -20,6 +22,21 @@ class AIM:
 
 
     def cluster_courses(self, n_clusters='auto', k_ranges=np.linspace(80, 121, 40)):
+        """handles cluster_courses function
+
+        Args:
+            n_clusters (str, optional): 
+            Number of clusters for the K-Means clustering algorithm. Defaults to 'auto'.
+            If set to 'auto', try to find the optimal amount of clusters bases on silhouette scores.
+                       This is recommended if you don't need the result fast, since finding the amount
+                       of clusters is computationally expensive.
+            k_ranges (_type_, optional): Different k_means k values that are going to be tested in order to find the optimal k.
+                                         Defaults to np.linspace(80, 121, 40).
+
+        Returns:
+            pandas Dataframe: 'Component_1', 'Component_2', 'Cluster Name', 'Course Name',
+                                                    'Course Name','Degree Name','Uni Name'
+        """        
         self.__activated_clustering = True
 
         self.__course_clusters = clustering.cluster_courses(
