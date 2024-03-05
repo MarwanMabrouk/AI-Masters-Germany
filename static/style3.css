@@ -205,3 +205,22 @@ hr{
         text-align: center;
     }
 }
+
+/* For normal screens (laptop, desktop, etc.) */
+.img-container {
+    max-width: 15%;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* For mobile screens */
+@media (max-width: 767.98px) {
+    .img-container {
+        max-width: 80%;
+        height: auto;
+    }
+}
+
