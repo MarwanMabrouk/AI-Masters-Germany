@@ -1,19 +1,27 @@
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 
-def plot_institute_types(database, show_plot=True):
+def plot_institute_types(database, show_plot=False):
+    """generates bar chart to visualize types of institutes in the database
+
+    Args:
+        database (PandasDataframe): Database of insitutes loaded as a pandas dataframe
+        show_plot (bool, optional): specifies if plot should be shown seperately. Defaults to True.
+
+    Returns:
+        Plotly Figure: Bar chart of typres of institutes in database
+    """    
 
     institutes = database[["Uni/Fachhochschule/TU", "Uni Name"]]
     institutes = institutes.drop_duplicates()
-    # Now we have one entry per school
+    
 
     institute_counts = institutes["Uni/Fachhochschule/TU"].value_counts()
     institutes["Amount_Institute_Type"] = institutes["Uni/Fachhochschule/TU"].map(institute_counts)
-    # Now we know how many Unis, TU's etc. are in the dataset
+    
 
-    # We have a lot of repetition we are now going to remove
+
     institutes = institutes[["Uni/Fachhochschule/TU", "Amount_Institute_Type"]]
     institutes = institutes.drop_duplicates()
 
@@ -42,7 +50,16 @@ def plot_institute_types(database, show_plot=True):
     return fig
 
 
-def plot_lecture_types(database, show_plot):
+def plot_lecture_types(database, show_plot=False):
+    """generates bar chart for the visualization of types of lectures in database
+
+    Args:
+        database (Pandas Dataframe): Database of insitutes loaded as a pandas dataframe
+        show_plot (bool, optional): specifies if plot should be shown seperately. Defaults to False.
+
+    Returns:
+        Plotly Figure: Bar chart of typres of institutes in database
+    """    
     database = database.copy()
     database["Name"] = database["Uni Name"] + " - " + database["Degree Name"]
 
@@ -72,7 +89,7 @@ def plot_lecture_types(database, show_plot):
     return fig
 
 
-def plot_clusters(clustering_result, show_plot=True):
+def plot_clusters(clustering_result, show_plot=False):
     """
     Plot course clustering result.
 
@@ -95,8 +112,16 @@ def plot_clusters(clustering_result, show_plot=True):
 
     return fig
 
-def plot_popular_courses(data, show_plot=True):
-    # todo: Fill with code
+def plot_popular_courses(data, show_plot=False):
+    """generates bar chart to visualize density of each cluster
+
+    Args:
+        data (Pandas Dataframe): Database of insitutes loaded as a pandas dataframe
+        show_plot (bool, optional): specifies if plot should be shown seperately. Defaults to False.
+
+    Returns:
+        Plotly Figure: Bar chart to represent density of courses clusters
+    """    
     fig=px.bar(
         data,
         x="Cluster Count",
@@ -110,18 +135,4 @@ def plot_popular_courses(data, show_plot=True):
 
     return fig
 
-def plot_similar_courses(data,show_plot):
-    
-    fig=px.bar(
-        data,
-        x="Course Name",
-        y="score",
-        color="Course Name",
-        title="Course Similarity Plot",
-        hover_data=["Uni Name","Course Description","Goals"]
-    )
-    print(data["Course Name"])
-    if show_plot:
-        fig.show()
-    
-    return fig
+
