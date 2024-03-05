@@ -40,7 +40,10 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center">
-                <img class="img-fluid d-none d-sm-block" style="max-width: 15%; height: auto;" src="{{ url_for('static', filename='images/logo.svg') }}" alt="Our logo">
+                <div class="img-container">
+                    <!-- style="max-width: 15%; height: auto;"  d-none d-sm-block-->
+                    <img class="img-fluid d-flex " src="{{ url_for('static', filename='images/logo.svg') }}" alt="Our logo">
+                </div>
             </div>
         </div>
     </div>
