@@ -9,9 +9,9 @@ import plotly
 import threading
 from pymongo import MongoClient
 from config import CONNECTION_STRING
+
 #TODO: convert credentials to environment variables
 print('Connecting to database...')
-
 client = MongoClient(CONNECTION_STRING)
 
 db = client['data']
@@ -19,18 +19,27 @@ collection = db['data']
 print('Done connecting to database!')
 
 app = Flask(__name__)
+
+# Start clustering courses in a thread
 aim = AIM(collection_object=collection)
+course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
+course_clustering_thread.start()
+
+# Load sentece transformer
 print('Loading sentence transformer model...')
 sentence_transformer_model = 'sentence-transformers/msmarco-distilbert-multilingual-en-de-v2-tmp-lng-aligned'
 embedder = SentenceTransformer(sentence_transformer_model)
 print('Done loading sentence transformer model!')
 corpus_embeddings=None
-course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
-course_clustering_thread.start()
-
 
 @app.route("/", methods=["GET", "POST"])
 def firstPage():
+    """
+    Main site showing information like
+    - total number of degrees
+    - total number of institutes
+    - total number of courses
+    """
     course_name = collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
     uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
@@ -73,6 +82,10 @@ def third_page():
 
 @app.route("/search")
 def second_page():
+    """
+    Search page that allows you to select a study degree and then returns
+    a list of courses contained in the corresponding study degree.
+    """
     database = aim.get_database(unprocessed=True).copy()
     database["degree_choices"] = database["Degree Name"] + " - " + database["Uni Name"]
     degree_choices = database["degree_choices"].unique()
@@ -98,6 +111,9 @@ def search__update_selected_degree():
 
 @app.route("/institute_types")
 def institute_types():
+    """
+    Site that shows amount of different institute (types) in dataset (e.g., amount of universities, amount of TU's etc.).
+    """
 
     database = aim.get_database()
     fig = plotting.plot_institute_types(database, show_plot=False)
@@ -105,8 +121,12 @@ def institute_types():
 
     return render_template("institute_types.html", fig_json=fig_json)
 
+
 @app.route("/map_view")
 def map_view():
+    """
+    Site showing the location of the institutes in our dataset.
+    """
     database = aim.get_database()
     fig = map.get_map(database)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
@@ -116,6 +136,9 @@ def map_view():
 
 @app.route("/lecture_types")
 def lecture_types():
+    """
+    Site showing the amount of obligatory and elective courses per study degree.
+    """
 
     database = aim.get_database()
     fig = plotting.plot_lecture_types(database, show_plot=False)
@@ -126,6 +149,9 @@ def lecture_types():
 
 @app.route("/course_clustering", methods=["GET", "POST"])
 def course_clustering():
+    """
+    Site showing the result of course clustering and the density of the clusters.
+    """
     
     database = aim.get_database()
     clusters = aim.get_clustered_courses()
@@ -198,7 +224,9 @@ def course_clustering():
 
 @app.route("/search_courses", methods=["GET", "POST"])
 def search_courses():
-    
+    """
+    Site allowing the user to search for similar courses.
+    """
     database = aim.get_database()
     if request.method == "POST":
         search_query=request.form["search_query"]
