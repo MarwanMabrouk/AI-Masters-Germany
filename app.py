@@ -203,22 +203,28 @@ def search_courses():
         global corpus_embeddings
         if corpus_embeddings is None:
             print('Running Corpus Embedding')
-            corpus_embeddings=similarity.encode_text(df=data,embedder=embedder,features=['Course Name','Course Description','Goals'])
+            corpus_embeddings = similarity.encode_text(
+                df=data,
+                embedder=embedder,
+                features=['Course Name', 'Course Description', 'Goals']
+            )
             print('Done Embedding')
-        search_results=similarity.text_similarity(df=data,query=search_query,embedder=embedder,corpus_embeddings=corpus_embeddings,top_k=top_freq)
+        search_results = similarity.text_similarity(
+            query=search_query,
+            embedder=embedder,
+            corpus_embeddings=corpus_embeddings,
+            top_k=top_freq
+        )
     
         data=data.iloc[search_results[1]]
         data["Similarity Score"]=[f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
         data["score"]=search_results[0]
         data=data[["Uni Name","Course Name","Course Description","Goals","Similarity Score"]].reset_index(drop=True)
         table_html=data.to_html()
-        
-    
     else:
         search_query=""
         top_freq=10
         table_html=None
-    
     
     return render_template("search_courses.html",
                            table_html=table_html,

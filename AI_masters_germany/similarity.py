@@ -33,11 +33,11 @@ def text_similarity(query, embedder, corpus_embeddings, top_k=5):
     :return: List of tuples with most similar courses and their similarity score to query.
     """    
         
-    results={}
-    query_embedding=embedder.encode(query,convert_to_tensor=True)
+    results = {}
+    query_embedding = embedder.encode(query, convert_to_tensor=True)
     cos_scores = util.cos_sim(query_embedding, corpus_embeddings)[0]
     top_results = torch.topk(cos_scores, k=top_k)
-    results=top_results
+    results = top_results
     
     return results
 
