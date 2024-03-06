@@ -28,6 +28,7 @@ def cluster_courses(df,
                        of clusters is computationally expensive.
     :param k_ranges: Different k_means k values that are going to be tested in order to find the optimal k.
                      Is only used when n_clusters is set to True!
+
     :return: A pandas Dataframe with the columns: 'Component_1', 'Component_2', 'Cluster', 'Course Name'
     """
     print('Start clustering...')
@@ -64,7 +65,6 @@ def cluster_courses(df,
             k_means = KMeans(n_clusters=k, n_init='auto')
             clusters = k_means.fit_predict(X)
             score = silhouette_score(X, clusters)
-            #print(f'k: {k} -> silhouette score: {score}')
             if score > best_score:
                 best_k = k
                 best_score = score
@@ -76,13 +76,13 @@ def cluster_courses(df,
         clusters = k_means.fit_predict(X)
     labels = k_means.labels_
 
-# Get the centroids
+    # Get the centroids
     centroids = k_means.cluster_centers_
 
-# Find the index of the point closest to the centroid in each cluster
+    # Find the index of the point closest to the centroid in each cluster
     closest_points_indices, _ = pairwise_distances_argmin_min(centroids, X)
 
-# Assign the closest points as labels for each cluster
+    # Assign the closest points as labels for each cluster
     cluster_labels = [df.iloc[index]["Course Name"] for index in closest_points_indices]
     cluster_names=[cluster_labels[label] for label in labels]
     result = pd.DataFrame(X, columns=['Component_1', 'Component_2'])
