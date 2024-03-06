@@ -11,7 +11,6 @@ from AI_masters_germany import plotting, map, similarity
 from AI_masters_germany.aim import AIM
 from config import CONNECTION_STRING
 
-#TODO: convert credentials to environment variables
 print('Connecting to database...')
 client = MongoClient(CONNECTION_STRING)
 
