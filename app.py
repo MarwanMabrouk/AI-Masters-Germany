@@ -1,11 +1,8 @@
-from flask import Flask, render_template, request
 import pandas as pd
-import openpyxl
-import pandas as pd
-from AI_masters_germany import utils, clustering, plotting,map,similarity
+from AI_masters_germany import plotting, map, similarity
 from AI_masters_germany.aim import AIM
-from sentence_transformers import SentenceTransformer, util
-from flask import Flask,render_template, request,jsonify
+from sentence_transformers import SentenceTransformer
+from flask import Flask, render_template, request, jsonify
 import numpy as np
 import json
 import plotly
@@ -31,6 +28,7 @@ corpus_embeddings=None
 course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
 course_clustering_thread.start()
 
+
 def get_data():
     course_name=collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
@@ -39,19 +37,19 @@ def get_data():
     tu_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"TU"}))
     hochschule_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"Hochschule"}))
 
-    #get no of unique Uni
+    # Get amount of unique Uni
     cuft = len(collection.distinct("Uni Name"))
 
-    #get no of unique Degree Uni Pairs 
+    # Get amount of unique Degree Uni Pairs
     result = collection.aggregate( 
             [
                 {"$group": { "_id": { "Uni Name": "$Uni Name", "Degree Name": "$Degree Name" } } }
             ]
         )
     cdn = 0
-    for i in result:
+    for _ in result:
         cdn += 1
-    #get no of unique Course Name
+    # Get amount of unique Course Name
     ccn = collection.count_documents({})
 
     return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount
@@ -167,7 +165,7 @@ def course_clustering():
         data = clusters[credits_condition & lecture_type_condition & specialisation_conditions]
 
     else:
-        top_freq=10
+        top_freq = 10
         min_credits = 1
         max_credits = int(database["ECTS"].max())
 
@@ -180,9 +178,10 @@ def course_clustering():
     fig = plotting.plot_clusters(data, show_plot=False)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    grouped_data=data.groupby(["Cluster","Cluster Name"]).size().reset_index(name='Cluster Count').sort_values(by="Cluster Count", ascending=False)
-    fig_density=plotting.plot_popular_courses(grouped_data[:top_freq],show_plot=False)
-    fig_density_html=fig_density.to_html()
+    grouped_data = data.groupby(["Cluster", "Cluster Name"]).size().reset_index(name='Cluster Count')
+    grouped_data = grouped_data.sort_values(by="Cluster Count", ascending=False)
+    fig_density = plotting.plot_popular_courses(grouped_data[:top_freq], show_plot=False)
+    fig_density_html = fig_density.to_html()
     return render_template("course_clustering.html",
                            fig_json=fig_json,
                            fig_density_html=fig_density_html,
@@ -190,6 +189,7 @@ def course_clustering():
                            min_credits=min_credits, max_credits=max_credits,
                            lecture_type=lecture_type,
                            checked_specialisations=checked_specialisations)
+
 
 @app.route("/search_courses", methods=["GET", "POST"])
 def search_courses():
@@ -216,20 +216,18 @@ def search_courses():
             top_k=top_freq
         )
     
-        data=data.iloc[search_results[1]]
-        data["Similarity Score"]=[f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
-        data["score"]=search_results[0]
-        data=data[["Uni Name","Course Name","Course Description","Goals","Similarity Score"]].reset_index(drop=True)
-        table_html=data.to_html()
+        data = data.iloc[search_results[1]]
+        data["Similarity Score"] = [f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
+        data["score"] = search_results[0]
+        data = data[["Uni Name", "Course Name", "Course Description", "Goals", "Similarity Score"]].reset_index(drop=True)
+        table_html = data.to_html()
     else:
-        search_query=""
-        top_freq=10
-        table_html=None
+        search_query = ""
+        table_html = None
     
     return render_template("search_courses.html",
                            table_html=table_html,
-                           search_query=search_query,) 
-
+                           search_query=search_query)
 
 
 if __name__ == '__main__':
