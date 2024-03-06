@@ -2,42 +2,35 @@ from sentence_transformers import SentenceTransformer, util
 import torch
 import numpy as np
 
-def encode_text(df,
-                embedder,
-                features='Course Name',
-                ):
-    """Generates embeddings for course names, description and goals in the database
 
-    Args:
-        df (Pandas Dataframe): Database of courses loaded as pandas dataframe
-        embedder (Sentence Transformer): Defines embedding model used to encode corpus
-        features (str, optional): set the attribute to be included in the embedding, can also include description 
-                                  and goals. Defaults to 'Course Name'.
+def encode_text(df, embedder, features='Course Name'):
+    """
+    Generate embeddings based on course feature(s).
 
-    Returns:
-        Sentence Embeddings: encoded text as sentence embeddings
-    """    
-   
-    corpus=np.array(df[list(features)].astype(str).agg(' '.join, axis=1))
-    corpus_embeddings=embedder.encode(corpus,convert_to_tensor=True)
+    :param df: Database loaded as pandas dataframe.
+    :param embedder: Defines embedding model used to encode corpus.
+    :param features: Define attribute(s) to be included in the embedding.
+                     Defaults to 'Course Name', but could also include course descriptions and goals.
+
+    :return: Encoded text as sentence embeddings.
+    """
+    # First we are going to extract the feature-columns and join them by whitespaces
+    corpus = np.array(df[list(features)].astype(str).agg(' '.join, axis=1))
+    # Apply sentence transformer on our data
+    corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
     return corpus_embeddings
 
 
-def text_similarity(query,
-                    embedder,
-                    corpus_embeddings,
-                    top_k=5,
-                    ):
-    """Extracts highest similar courses to user input
+def text_similarity(query, embedder, corpus_embeddings, top_k=5):
+    """
+    Extracts most similar courses to user input.
 
-    Args:
-        query (Str): Query inserted by user
-        embedder (Sentence Transformer): Defines embedding model used to encode query
-        corpus_embeddings (sentence embeddings): generated embeddings for entire corpus
-        top_k (int, optional): Top k results returned by retriever. Defaults to 5.
+    :param query: Query inserted by user.
+    :param embedder: Defines embedding model used to encode query.
+    :param corpus_embeddings: Generated embeddings for entire corpus.
+    :param top_k: Chose how many top results to return. Defaults to 5 (for top 5 most similar courses).
 
-    Returns:
-        List: List of tuples with most similar courses and their similarity score to query
+    :return: List of tuples with most similar courses and their similarity score to query.
     """    
         
     results={}
