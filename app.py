@@ -29,37 +29,42 @@ course_clustering_thread = threading.Thread(target=aim.cluster_courses, args=())
 course_clustering_thread.start()
 
 
-def get_data():
-    course_name=collection.distinct("Course Name")
+@app.route("/", methods=["GET", "POST"])
+def firstPage():
+    course_name = collection.distinct("Course Name")
     degree_Name = collection.distinct("Degree Name")
     uni_fachhochschule_tu = collection.distinct("Uni/Fachhochschule/TU")
     uni_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU": "Universität"}))
-    tu_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"TU"}))
-    hochschule_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU":"Hochschule"}))
+    tu_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU": "TU"}))
+    hochschule_amount = len(collection.distinct("Uni Name", {"Uni/Fachhochschule/TU": "Hochschule"}))
 
     # Get amount of unique Uni
     cuft = len(collection.distinct("Uni Name"))
 
     # Get amount of unique Degree Uni Pairs
-    result = collection.aggregate( 
-            [
-                {"$group": { "_id": { "Uni Name": "$Uni Name", "Degree Name": "$Degree Name" } } }
-            ]
-        )
+    result = collection.aggregate(
+        [
+            {"$group": {"_id": {"Uni Name": "$Uni Name", "Degree Name": "$Degree Name"}}}
+        ]
+    )
     cdn = 0
     for _ in result:
         cdn += 1
     # Get amount of unique Course Name
     ccn = collection.count_documents({})
 
-    return course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount
-
-
-@app.route("/",methods=["GET", "POST"])
-def firstPage():
-    course_name, degree_Name, uni_fachhochschule_tu, ccn, cdn, cuft,uni_amount,tu_amount,hochschule_amount = get_data()
-    return render_template("firstPage.html", course_name=course_name, degree_Name=degree_Name,
-                           uft=uni_fachhochschule_tu, ccn=ccn, cdn=cdn, cuft=cuft,uni_amount=uni_amount,tu_amount=tu_amount,hochschule_amount=hochschule_amount)
+    return render_template(
+        "firstPage.html",
+        course_name=course_name,
+        degree_Name=degree_Name,
+        uft=uni_fachhochschule_tu,
+        ccn=ccn,
+        cdn=cdn,
+        cuft=cuft,
+        uni_amount=uni_amount,
+        tu_amount=tu_amount,
+        hochschule_amount=hochschule_amount
+    )
 
 @app.route("/visualization")
 def third_page():
