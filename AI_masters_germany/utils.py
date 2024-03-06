@@ -1,9 +1,11 @@
 import nltk
 import pandas as pd
 
+
 def stopwords_removal(text):
     """
     Remove german and english stopwords from text.
+    Also filter out specific characters like ',', '.' or ':'.
 
     :param text: A string from which stopwords should be removed.
     :return: Text without stopwords.
@@ -35,7 +37,7 @@ def database_preprocessing(df, remove_stopwords=False):
     """
     Database preprocessing function.
 
-    :param df: A pandas dataframe (e.g., result of pandas.read_csv method).
+    :param df: A pandas dataframe containing the database.
     :param remove_stopwords: if True, remove stopwords from 'Course Description' and 'Goals' columns.
     :return: A preprocessed pandas dataframe.
     """
