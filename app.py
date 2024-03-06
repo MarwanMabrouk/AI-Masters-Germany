@@ -33,7 +33,7 @@ print('Done loading sentence transformer model!')
 corpus_embeddings=None
 
 @app.route("/", methods=["GET", "POST"])
-def firstPage():
+def first_page():
     """
     Main site showing information like
     - total number of degrees
