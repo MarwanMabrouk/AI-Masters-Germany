@@ -3,28 +3,25 @@ import plotly.express as px
 
 
 def plot_institute_types(database, show_plot=False):
-    """generates bar chart to visualize types of institutes in the database
+    """
+    Generate bar chart to visualize amount of different types of institutes in the database.
 
-    Args:
-        database (PandasDataframe): Database of insitutes loaded as a pandas dataframe
-        show_plot (bool, optional): specifies if plot should be shown seperately. Defaults to True.
+    :param database: Database in the form of a pands Dataframe.
+    :param show_plot: Boolean value specifying if plot should be shown.
+                      In case of set to False, only return Plotly figure but don't show it directly.
+                      Defaults is False.
 
-    Returns:
-        Plotly Figure: Bar chart of typres of institutes in database
+    :return: Plotly figure bar chart visualizing amount of different types of institutes in the database.
     """    
 
     institutes = database[["Uni/Fachhochschule/TU", "Uni Name"]]
     institutes = institutes.drop_duplicates()
-    
 
     institute_counts = institutes["Uni/Fachhochschule/TU"].value_counts()
     institutes["Amount_Institute_Type"] = institutes["Uni/Fachhochschule/TU"].map(institute_counts)
-    
-
 
     institutes = institutes[["Uni/Fachhochschule/TU", "Amount_Institute_Type"]]
     institutes = institutes.drop_duplicates()
-
 
     institutes["Names"] = institutes["Uni/Fachhochschule/TU"].apply(
         lambda x: ", <br>".join(database[database["Uni/Fachhochschule/TU"] == x]["Uni Name"].unique())
@@ -51,14 +48,16 @@ def plot_institute_types(database, show_plot=False):
 
 
 def plot_lecture_types(database, show_plot=False):
-    """generates bar chart for the visualization of types of lectures in database
+    """
+    Generates bar chart for the visualization of amount of different types of lectures in database
+    (i.e., amount of obligatory and elective courses).
 
-    Args:
-        database (Pandas Dataframe): Database of insitutes loaded as a pandas dataframe
-        show_plot (bool, optional): specifies if plot should be shown seperately. Defaults to False.
+    :param database: Database in the form of a pands Dataframe.
+    :param show_plot: Boolean value specifying if plot should be shown.
+                      In case of set to False, only return Plotly figure but don't show it directly.
+                      Defaults is False.
 
-    Returns:
-        Plotly Figure: Bar chart of typres of institutes in database
+    :return: Plotly figure bar chart visualizing the amount of different types of lectures in database.
     """    
     database = database.copy()
     database["Name"] = database["Uni Name"] + " - " + database["Degree Name"]
@@ -112,15 +111,17 @@ def plot_clusters(clustering_result, show_plot=False):
 
     return fig
 
+
 def plot_popular_courses(data, show_plot=False):
-    """generates bar chart to visualize density of each cluster
+    """
+    Generates bar chart to visualize density of each cluster.
 
-    Args:
-        data (Pandas Dataframe): Database of insitutes loaded as a pandas dataframe
-        show_plot (bool, optional): specifies if plot should be shown seperately. Defaults to False.
+    :param data: Database of institutes in the form of a pands Dataframe.
+    :param show_plot: Boolean value specifying if plot should be shown.
+                      In case of set to False, only return Plotly figure but don't show it directly.
+                      Defaults is False.
 
-    Returns:
-        Plotly Figure: Bar chart to represent density of courses clusters
+    :return: Plotly figure bar chart visualizing the densities of each cluster.
     """    
     fig=px.bar(
         data,
