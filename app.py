@@ -1,13 +1,14 @@
+import threading
+import subprocess
+import json
+import numpy as np
 import pandas as pd
+import plotly
+from pymongo import MongoClient
+from flask import Flask, render_template, request, jsonify
+from sentence_transformers import SentenceTransformer
 from AI_masters_germany import plotting, map, similarity
 from AI_masters_germany.aim import AIM
-from sentence_transformers import SentenceTransformer
-from flask import Flask, render_template, request, jsonify
-import numpy as np
-import json
-import plotly
-import threading
-from pymongo import MongoClient
 from config import CONNECTION_STRING
 
 #TODO: convert credentials to environment variables
@@ -261,6 +262,15 @@ def search_courses():
     return render_template("search_courses.html",
                            table_html=table_html,
                            search_query=search_query)
+
+@app.route("/github_webhook", methods=["GET", "POST"])
+def github_webhook():
+    #do git pull inside of a specific folder
+    print('Pulling from github...')
+
+    process = subprocess.Popen("git pull", shell=True)
+
+    return "Done"
 
 
 if __name__ == '__main__':
