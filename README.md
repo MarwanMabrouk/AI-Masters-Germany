@@ -84,7 +84,9 @@ It is automatically updated with the latest changes from the main branch using G
 
 Link to the Video Demo: [YouTube](https://www.youtube.com/watch?v=Hkf_qIQe2ho)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Hkf_qIQe2ho?si=HR7LGLMsB_wzvOh0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<p align="center">
+<video src='demo.mkv' width=180/>
+</p>
 
 ## Tech Stack
 
