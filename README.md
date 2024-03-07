@@ -68,7 +68,7 @@ Install dependencies
 Start Flask
 
 ```bash
-  flask run
+  python app.py
 ```
 
 ## Deployment / Live Demo
