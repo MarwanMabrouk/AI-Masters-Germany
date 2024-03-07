@@ -15,4 +15,4 @@ try:
     print("Using remote database")
 except Exception as e:
     print("No .env file found, using local database instead")
-    CONNECTION_STRING = 'mongodb://localhost:'+LOCAL_DB_PORT+'/' + DB_NAME
+    CONNECTION_STRING = 'mongodb://localhost:'+str(LOCAL_DB_PORT)+'/' + DB_NAME
