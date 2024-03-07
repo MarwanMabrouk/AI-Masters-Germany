@@ -22,7 +22,7 @@ Master Exploration & Overview Webapp
 You can use a local or remote MongoDB database to run the project.
 
 ### Using the remote MongoDB
-##### Note: The remote database is only available until 31.03.2024 using the `.env` file that was provided separately.
+##### Note: using the `.env` file that was provided separately.
 
   - Move the `.env` file to the root of the project (same level as `app.py`) \
 
