@@ -26,7 +26,7 @@ You can use a local or remote MongoDB database to run the project.
 ### Using the remote MongoDB
 ##### Note: Using the `.env` file that was provided separately.
 
-  - Move the `.env` file to the root of the project (same level as `app.py`) \
+  - Move the `.env` file to the root of the project (same level as `app.py`)
 
 Note: The remote database is up to date. No need to run the `update_database.py` file.
 
