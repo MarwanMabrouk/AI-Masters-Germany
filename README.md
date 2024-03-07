@@ -12,7 +12,9 @@ Master Exploration & Overview Webapp
 <img src="https://img.shields.io/badge/Uni-UDE-blue"/> <img src="https://img.shields.io/badge/Course-Learning Analytics-red"/> <img src="https://img.shields.io/badge/Contributers-6-green"/> 
 </p>
 <p align="center">
-<img src="project_logo.png" width="350">
+<img src="project_logo.png" width="350"> 
+
+MEOW is an explorative web application that allows you to explore AI and data science study degrees in Germany. It was implemented in order to support students in the choice of AI and DS study degrees as well as to support the establishment of new study degrees in these fields.
 </p>
 
 
