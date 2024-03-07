@@ -24,7 +24,7 @@ MEOW is an explorative web application that allows you to explore AI and data sc
 You can use a local or remote MongoDB database to run the project.
 
 ### Using the remote MongoDB
-##### Note: using the `.env` file that was provided separately.
+##### Note: Using the `.env` file that was provided separately.
 
   - Move the `.env` file to the root of the project (same level as `app.py`) \
 
@@ -84,9 +84,7 @@ It is automatically updated with the latest changes from the main branch using G
 
 ## Video Demo
 
-Link to the Video Demo: [YouTube](https://www.youtube.com/watch?v=Hkf_qIQe2ho)
-
-
+Link to the video demonstration: [YouTube](https://www.youtube.com/watch?v=Hkf_qIQe2ho)
 
 https://github.com/MarwanMabrouk/AI-Masters-Germany/assets/48681637/f4545a9b-69e1-47ed-812c-cbea9920d9c1
 
@@ -102,9 +100,9 @@ https://github.com/MarwanMabrouk/AI-Masters-Germany/assets/48681637/f4545a9b-69e
 
 ## Known Issues/Limitations
 
-- The Clustering takes up to 3 min to start after starting the website to be ready.
-- Similarity calculation takes up to 1 min only for the first request.
-- Requires 3-4 GB of RAM due to Models used
+- The course clustering takes up to 3 min to be readyy after starting the website.
+- Similarity calculation takes up to 1 min, but only for the first request.
+- The used models require 3 to 4 GB of RAM.
 
 ## Authors
 The Data Connoisseurs
