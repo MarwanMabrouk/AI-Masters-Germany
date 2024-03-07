@@ -242,16 +242,19 @@ def search_courses():
                 features=['Course Name', 'Course Description', 'Goals']
             )
             print('Done Embedding')
-        search_results = similarity.text_similarity(
+        values, indices = similarity.text_similarity(
             query=search_query,
             embedder=embedder,
             corpus_embeddings=corpus_embeddings,
             top_k=top_freq
         )
+
+        values = values.cpu()
+        indices = indices.cpu()
     
-        data = data.iloc[search_results[1]]
-        data["Similarity Score"] = [f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
-        data["score"] = search_results[0]
+        data = data.iloc[indices]
+        data["Similarity Score"] = [f"{score.item()*100:.2f}"+"%" for score in values]
+        data["score"] = values
         data = data[["Uni Name", "Course Name", "Course Description", "Goals", "Similarity Score"]].reset_index(drop=True)
         table_html = data.to_html()
     else:
