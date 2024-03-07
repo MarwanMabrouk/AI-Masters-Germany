@@ -80,6 +80,10 @@ It is automatically updated with the latest changes from the main branch using G
 
 ![Screenshot](screenshots.png)
 
+## Video Demo
+
+Link to the Video Demo: [YouTube](https://www.youtube.com/watch?v=Hkf_qIQe2ho)
+
 ## Tech Stack
 
 
