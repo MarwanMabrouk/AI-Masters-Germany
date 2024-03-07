@@ -93,12 +93,15 @@ https://github.com/MarwanMabrouk/AI-Masters-Germany/assets/48681637/f4545a9b-69e
 
 ## Tech Stack
 
-
 **Frontend :** Flask Templates, Bootstrap\
 **Backend :** Flask\
 **Visualizations :** Plotly\
 **Database :** MongoDB\
 **Design :** Figma (not integrated in the final website) 
+
+## Architecture
+
+![Architecture](architecture.png)
 
 ## Known Issues/Limitations
 
