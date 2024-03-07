@@ -248,6 +248,8 @@ def search_courses():
             corpus_embeddings=corpus_embeddings,
             top_k=top_freq
         )
+
+        search_results = search_results.detach().cpu().numpy()
     
         data = data.iloc[search_results[1]]
         data["Similarity Score"] = [f"{score.item()*100:.2f}"+"%" for score in search_results[0]]
