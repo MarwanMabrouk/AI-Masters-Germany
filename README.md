@@ -84,9 +84,10 @@ It is automatically updated with the latest changes from the main branch using G
 
 Link to the Video Demo: [YouTube](https://www.youtube.com/watch?v=Hkf_qIQe2ho)
 
-<p align="center">
-<video src='demo.mkv' width=180/>
-</p>
+
+
+https://github.com/MarwanMabrouk/AI-Masters-Germany/assets/48681637/f4545a9b-69e1-47ed-812c-cbea9920d9c1
+
 
 ## Tech Stack
 
