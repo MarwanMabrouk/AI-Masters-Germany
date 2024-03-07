@@ -26,7 +26,7 @@ You can use a local or remote MongoDB database to run the project.
 ### Using the remote MongoDB
 ##### Note: Using the `.env` file that was provided separately.
 
-  - Move the `.env` file to the root of the project (same level as `app.py`) \
+  - Move the `.env` file to the root of the project (same level as `app.py`)
 
 Note: The remote database is up to date. No need to run the `update_database.py` file.
 
@@ -103,7 +103,7 @@ https://github.com/MarwanMabrouk/AI-Masters-Germany/assets/48681637/f4545a9b-69e
 
 ## Known Issues/Limitations
 
-- The course clustering takes up to 3 min to be readyy after starting the website.
+- The course clustering takes up to 3 min to be ready after starting the website.
 - Similarity calculation takes up to 1 min, but only for the first request.
 - The used models require 3 to 4 GB of RAM.
 
