@@ -1,6 +1,6 @@
 
 DB_NAME = "data"
-
+LOCAL_DB_PORT = 27017 #modify this if using local db and your local port is different
 try:
     from dotenv import dotenv_values
     config = dotenv_values(".env")
@@ -15,4 +15,4 @@ try:
     print("Using remote database")
 except Exception as e:
     print("No .env file found, using local database instead")
-    CONNECTION_STRING = 'mongodb://localhost:27017/' + DB_NAME
+    CONNECTION_STRING = 'mongodb://localhost:'+LOCAL_DB_PORT+'/' + DB_NAME
