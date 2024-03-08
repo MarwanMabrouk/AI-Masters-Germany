@@ -38,7 +38,7 @@ Note: The remote database is up to date. No need to run the `update_database.py`
 )
 
 
-  2. Start MongoDB (Modify `config.py` parameters if needed, such as local port number) 
+  2. Start MongoDB (By default the port number is `27017` in case it's different modify `config.py` as needed) 
 
   3. Update/Fill Database with Data\
     - Run the `update_database.py` file to fill the database with the data from the Google Datasheet\
